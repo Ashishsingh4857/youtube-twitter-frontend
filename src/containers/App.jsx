@@ -1,13 +1,14 @@
 import React from "react";
+import Login from "../components/Auth/Login.jsx";
+import SignUp from "../components/Auth/Register.jsx";
 
 function App() {
-	return (
-		<>
-			<h1 className="text-3xl font-bold underline text-amber-300">
-				Hello world!
-			</h1>
-		</>
-	);
+  return (
+    <>
+      {/* <Login /> */}
+      <SignUp />
+    </>
+  );
 }
 
 export default App;
