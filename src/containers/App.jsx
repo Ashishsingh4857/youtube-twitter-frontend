@@ -1,12 +1,18 @@
 import React from "react";
-import Login from "../components/Auth/Login.jsx";
-import SignUp from "../components/Auth/Register.jsx";
+import { Route, Routes } from "react-router-dom";
+import { Login, SignUp, Layout } from "../components/index.js";
+import { HomePage } from "../pages/index.js";
 
 function App() {
   return (
     <>
-      {/* <Login /> */}
-      <SignUp />
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route path="" element={<HomePage />} />
+        </Route>
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignUp />} />
+      </Routes>
     </>
   );
 }
