@@ -7,6 +7,8 @@ import SignUp from "./Auth/Register.jsx";
 import Navbar from "./Header/Navbar.jsx";
 import Sidebar from "./Header/Sidebar.jsx";
 import Layout from "./Layout/Layout.jsx";
+import ProtectedRoute from "./Auth/ProtectedRoute.jsx";
+import PublicRoute from "./Auth/PublicRoute.jsx";
 
 export {
   Logo,
@@ -18,4 +20,6 @@ export {
   Navbar,
   Sidebar,
   Layout,
+  ProtectedRoute,
+  PublicRoute,
 };
