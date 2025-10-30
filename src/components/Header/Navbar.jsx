@@ -5,6 +5,8 @@ import { userLogout } from "../../store/slices/authSlice.js";
 import { AiOutlineSearch, AiOutlineMenu } from "react-icons/ai";
 import { Logo, Input, Button } from "../index.js";
 import { useForm } from "react-hook-form";
+import { toggleSidebar } from "../../store/slices/globalSlice.js";
+import { MdMenuOpen } from "react-icons/md";
 
 const Navbar = () => {
   const dispatch = useDispatch();
@@ -16,16 +18,31 @@ const Navbar = () => {
   const handleLogout = () => {
     dispatch(userLogout());
   };
-
+  ////toggle sidebar
+  const { isOpen } = useSelector((state) => state.global.sidebar);
   //search
   const onSubmit = async (data) => {
     console.log("Searching for:", data.searchQuery);
   };
 
   return (
-    <nav className="w-full h-14 p-3 flex justify-between items-center bg-gray-900 border-b border-gray-800 shadow-md fixed top-0 z-10">
+    <nav className="w-full h-14 p-3 flex justify-between items-center bg-gray-900 border-b border-gray-800 shadow-md fixed top-0  z-10">
       <div className="flex items-center">
-        <AiOutlineMenu className="text-2xl mr-4 cursor-pointer text-gray-400 hover:text-white transition-colors" />
+        {isOpen ? (
+          <>
+            <MdMenuOpen
+              className="text-2xl mr-4 cursor-pointer text-gray-400 hover:text-white transition-colors"
+              onClick={() => dispatch(toggleSidebar())}
+            />
+          </>
+        ) : (
+          <>
+            <AiOutlineMenu
+              className="text-2xl mr-4 cursor-pointer text-gray-400 hover:text-white transition-colors"
+              onClick={() => dispatch(toggleSidebar())}
+            />
+          </>
+        )}
         <Logo className="hidden sm:block" />
       </div>
       <div className="flex-grow flex justify-center">
