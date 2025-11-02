@@ -23,7 +23,7 @@ const Sidebar = () => {
 
   return (
     <aside
-      className={`${isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0 md:w-25 top-14"} fixed left-0 w-60 h-screen p-4 bg-gray-900 border-r border-gray-800 overflow-y-auto transition-transform duration-300  z-10`}
+      className={`${isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0 md:w-25 top-14"} fixed left-0 top-0 w-60 h-full p-4 bg-gray-900 border-r border-gray-800 overflow-y-auto transition-transform duration-300  z-10`}
     >
       {/* logo section-----> */}
       {isOpen ? (
