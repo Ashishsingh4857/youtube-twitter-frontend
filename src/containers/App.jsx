@@ -10,6 +10,7 @@ import {
 import { HomePage } from "../pages/index.js";
 import { useDispatch } from "react-redux";
 import { getCurrentUser } from "../store/slices/authSlice.js";
+import { ToastContainer, toast } from "react-toastify";
 
 function App() {
   const dispatch = useDispatch();
@@ -47,6 +48,22 @@ function App() {
           }
         />
       </Routes>
+      <ToastContainer
+        position="top-right"
+        reverseOrder={true}
+        toastOptions={{
+          error: {
+            style: { borderRadius: "0", color: "red" },
+          },
+          success: {
+            style: {
+              borderRadius: "0",
+              color: "green",
+            },
+          },
+          duration: 2000,
+        }}
+      />
     </>
   );
 }
