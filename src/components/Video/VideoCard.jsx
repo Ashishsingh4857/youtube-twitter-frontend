@@ -14,15 +14,17 @@ function VideoCard({
 }) {
   return (
     <div className="w-full  p-2">
-      <div className="group relative bg-gray-800 rounded-lg overflow-hidden transition duration-300 transform hover:scale-105">
+      <div className="group  bg-gray-800 rounded-lg overflow-hidden transition duration-300 transform hover:scale-105">
         <Link to={`/videos/${videoId}`}>
-          <img
-            src={thumbnail}
-            alt={title}
-            className="w-full h-40 object-cover"
-          />
-          <div className="absolute bottom-2 right-2 bg-black bg-opacity-70 text-white text-xs px-1 py-0.5 rounded">
-            {duration}
+          <div className="relative">
+            <img
+              src={thumbnail}
+              alt={title}
+              className="w-full h-40 object-cover "
+            />
+            <div className="absolute bottom-2 right-2 bg-black bg-opacity-70 text-white text-xs px-1 py-0.5 rounded">
+              {duration}
+            </div>
           </div>
         </Link>
         <div className="p-2 flex">
