@@ -36,7 +36,8 @@ export const getAllVideos = createAsyncThunk(
       }
 
       const response = await axiosInstance.get(url);
-
+      console.log(response);
+      toast.success(response?.data?.message);
       return response.data.data;
     } catch (error) {
       toast.error(error?.response?.data?.error);
@@ -153,7 +154,7 @@ const videoSlice = createSlice({
     });
     builder.addCase(getAllVideos.fulfilled, (state, action) => {
       state.loading = false;
-      state.videos.docs = [...state.videos.docs, ...action.payload.docs];
+      state.videos.docs = [...state.videos.docs, ...action.payload.videos];
       state.videos.hasNextPage = action.payload.hasNextPage;
     });
     builder.addCase(publishAvideo.pending, (state) => {
