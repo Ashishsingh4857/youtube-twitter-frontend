@@ -9,6 +9,8 @@ import Sidebar from "./Header/Sidebar.jsx";
 import Layout from "./Layout/Layout.jsx";
 import ProtectedRoute from "./Auth/ProtectedRoute.jsx";
 import PublicRoute from "./Auth/PublicRoute.jsx";
+import VideoCard from "./Video/VideoCard.jsx";
+import Container from "./Layout/Container.jsx";
 
 export {
   Logo,
@@ -22,4 +24,6 @@ export {
   Layout,
   ProtectedRoute,
   PublicRoute,
+  VideoCard,
+  Container,
 };
