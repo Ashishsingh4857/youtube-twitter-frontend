@@ -11,11 +11,14 @@ function VideoCard({
   channelName,
   createdAt,
   videoId,
+  className,
 }) {
   return (
     <div className="w-full  p-2">
-      <div className="group  bg-gray-800 rounded-lg overflow-hidden transition duration-300 transform hover:scale-105">
-        <Link to={`/videos/${videoId}`}>
+      <div
+        className={`group  bg-gray-800 rounded-lg overflow-hidden transition duration-300 transform hover:scale-105 ${className}`}
+      >
+        <Link to={`/watch/${videoId}`}>
           <div className="relative">
             <img
               src={thumbnail}
