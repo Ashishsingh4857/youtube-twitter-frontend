@@ -7,10 +7,10 @@ import {
   ProtectedRoute,
   PublicRoute,
 } from "../components/index.js";
-import { HomePage } from "../pages/index.js";
+import { HomePage, VideoDetail } from "../pages/index.js";
 import { useDispatch } from "react-redux";
 import { getCurrentUser } from "../store/slices/authSlice.js";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   const dispatch = useDispatch();
@@ -27,6 +27,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <HomePage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/watch/:videoId"
+            element={
+              <ProtectedRoute>
+                <VideoDetail />
               </ProtectedRoute>
             }
           />

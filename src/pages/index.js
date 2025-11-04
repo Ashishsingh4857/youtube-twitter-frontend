@@ -1,2 +1,3 @@
 import HomePage from "./HomePage.jsx";
-export { HomePage };
+import VideoDetail from "./VideoDetail.jsx";
+export { HomePage, VideoDetail };
