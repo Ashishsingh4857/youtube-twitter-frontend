@@ -11,6 +11,7 @@ import ProtectedRoute from "./Auth/ProtectedRoute.jsx";
 import PublicRoute from "./Auth/PublicRoute.jsx";
 import VideoCard from "./Video/VideoCard.jsx";
 import Container from "./Layout/Container.jsx";
+import VideoPlayer from "./Video/VideoPlayer.jsx";
 
 export {
   Logo,
@@ -26,4 +27,5 @@ export {
   PublicRoute,
   VideoCard,
   Container,
+  VideoPlayer,
 };
