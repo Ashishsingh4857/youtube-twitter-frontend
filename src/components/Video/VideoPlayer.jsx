@@ -9,7 +9,7 @@ import {
 } from "react-icons/fa";
 
 function VideoPlayer({ videoData, className, ...props }) {
-  // player controllers
+  // player controls
   const [playing, setPlaying] = useState(false);
   const [volume, setVolume] = useState(0.8);
   const [muted, setMuted] = useState(false);
@@ -48,7 +48,7 @@ function VideoPlayer({ videoData, className, ...props }) {
   return (
     <>
       <div
-        className={`relative aspect-w-16 aspect-h-9 sm:h-[68vh] sm:max-w-4xl h-64 w-full object-contain rounded-lg overflow-hidden bg-gray-900 ${className}`}
+        className={`relative aspect-video  w-full h-full object-contain rounded-lg overflow-hidden bg-gray-900 ${className}`}
       >
         <ReactPlayer
           ref={playerRef}
@@ -67,6 +67,7 @@ function VideoPlayer({ videoData, className, ...props }) {
         />
         {/* controllers */}
         <div className="absolute bottom-0 h-14 left-0 w-full bg-gray-700 bg-opacity-95 p-2 flex flex-col justify-between items-center">
+          {/* progress bar */}
           <input
             type="range"
             min={0}
