@@ -1,8 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getVideoById } from "../store/slices/videoSlice.js";
-import { Button, Navbar, Sidebar, VideoPlayer } from "../components/index.js";
+import { getAllVideos, getVideoById } from "../store/slices/videoSlice.js";
+import {
+  Button,
+  Navbar,
+  Sidebar,
+  VideoPlayer,
+  VideoList,
+} from "../components/index.js";
 import { SlLike, SlDislike } from "react-icons/sl";
 import { RiShareForwardLine } from "react-icons/ri";
 
@@ -20,15 +26,22 @@ function VideoDetail() {
 
   const dispatch = useDispatch();
   const { videoId } = useParams();
+  // single video doc
   const { video } = useSelector((state) => state.video);
+  //all videos docs
+  const videos = useSelector((state) => state.video?.videos?.docs);
 
   useEffect(() => {
     if (videoId) {
       dispatch(getVideoById({ videoId }));
     }
   }, [dispatch, videoId]);
+  useEffect(() => {
+    dispatch(getAllVideos({ page: 1, limit: 10 }));
+  }, [dispatch]);
 
-  if (!video || video.length === 0) return <div>Loading...</div>;
+  if (!video || (video.length === 0 && videos.length === 0))
+    return <div>Loading...</div>;
 
   const [videoData] = video;
 
@@ -115,7 +128,7 @@ function VideoDetail() {
                     }`}
                     onClick={() => setIsLiked(!isLiked)}
                   >
-                    <SlLike size={"text-xs"} />
+                    <SlLike size={20} />
                   </button>
                   <span className="text-white text-xs px-2">600k</span>
                   <button
@@ -126,7 +139,7 @@ function VideoDetail() {
                     }`}
                     onClick={() => setIsDisliked(!isDisliked)}
                   >
-                    <SlDislike size={"text-xs"} />
+                    <SlDislike size={20} />
                   </button>
                 </div>
                 <div className="h-9 p-2 w-20 rounded-full bg-gray-700 flex items-center ">
@@ -138,17 +151,49 @@ function VideoDetail() {
                     }`}
                     onClick={() => setIsShared(!isShared)}
                   >
-                    <RiShareForwardLine size={"text-xs"} />
+                    <RiShareForwardLine size={20} />
                     <span className="text-white text-xs px-2">share</span>{" "}
                   </button>
                 </div>
               </div>
             </div>
-            {/* comments */}
+            {/* comments section show only after width > 786px*/}
+            <div className="hidden md:block w-full h-[200px]">comments</div>
           </div>
         )}
         {/* video List */}
-        <div className="w-full md:w-[400px] h-full mt-4 md:mt-0"> </div>
+        <div className="w-full md:w-[400px] h-full mt-4 md:mt-0">
+          <h2 className="text-lg font-bold mb-4 md:mb-2 text-white">Up Next</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 gap-2">
+            {videos
+              ? videos.map((video) => {
+                  const {
+                    thumbnail,
+                    title,
+                    views,
+                    ownerDetails,
+                    createdAt,
+                    duration,
+                  } = video;
+                  return (
+                    <VideoList
+                      key={video._id}
+                      thumbnail={thumbnail?.url}
+                      title={title}
+                      views={views}
+                      avatar={ownerDetails.avatar?.url}
+                      channelName={ownerDetails.username}
+                      createdAt={createdAt}
+                      duration={duration}
+                      videoId={video._id}
+                    />
+                  );
+                })
+              : null}
+          </div>
+        </div>
+        {/* comments section show only after width < 786px*/}
+        <div className="block md:hidden  w-full h-[200px]">comments</div>
       </div>
     </>
   );
