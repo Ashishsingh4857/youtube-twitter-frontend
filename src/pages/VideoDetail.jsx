@@ -8,9 +8,11 @@ import {
   Sidebar,
   VideoPlayer,
   VideoList,
+  NoVideosFound,
 } from "../components/index.js";
 import { SlLike, SlDislike } from "react-icons/sl";
 import { RiShareForwardLine } from "react-icons/ri";
+import VideoDetailSkeleton from "../skeleton/VideoDetailSkeleton.jsx";
 
 function VideoDetail() {
   // toggle sidebar
@@ -39,9 +41,25 @@ function VideoDetail() {
   useEffect(() => {
     dispatch(getAllVideos({ page: 1, limit: 10 }));
   }, [dispatch]);
-
-  if (!video || (video.length === 0 && videos.length === 0))
-    return <div>Loading...</div>;
+  // if loading
+  const loading = useSelector((state) => state.video?.loading);
+  if (loading) {
+    return (
+      <>
+        <Navbar />
+        {isOpen ? <Sidebar /> : null}
+        <VideoDetailSkeleton />
+      </>
+    );
+  }
+  if (!video || video.length === 0)
+    return (
+      <>
+        <Navbar />
+        {isOpen ? <Sidebar /> : null}
+        <NoVideosFound />
+      </>
+    );
 
   const [videoData] = video;
 
@@ -165,31 +183,33 @@ function VideoDetail() {
         <div className="w-full md:w-[400px] h-full mt-4 md:mt-0">
           <h2 className="text-lg font-bold mb-4 md:mb-2 text-white">Up Next</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 gap-2">
-            {videos
-              ? videos.map((video) => {
-                  const {
-                    thumbnail,
-                    title,
-                    views,
-                    ownerDetails,
-                    createdAt,
-                    duration,
-                  } = video;
-                  return (
-                    <VideoList
-                      key={video._id}
-                      thumbnail={thumbnail?.url}
-                      title={title}
-                      views={views}
-                      avatar={ownerDetails.avatar?.url}
-                      channelName={ownerDetails.username}
-                      createdAt={createdAt}
-                      duration={duration}
-                      videoId={video._id}
-                    />
-                  );
-                })
-              : null}
+            {videos && videos.length > 0 ? (
+              videos.map((video) => {
+                const {
+                  thumbnail,
+                  title,
+                  views,
+                  ownerDetails,
+                  createdAt,
+                  duration,
+                } = video || {};
+                return (
+                  <VideoList
+                    key={video?._id}
+                    thumbnail={thumbnail?.url}
+                    title={title}
+                    views={views}
+                    avatar={ownerDetails?.avatar?.url}
+                    channelName={ownerDetails?.username}
+                    createdAt={createdAt}
+                    duration={duration}
+                    videoId={video?._id}
+                  />
+                );
+              })
+            ) : (
+              <NoVideosFound />
+            )}
           </div>
         </div>
         {/* comments section show only after width < 786px*/}

@@ -12,6 +12,8 @@ import PublicRoute from "./Auth/PublicRoute.jsx";
 import VideoCard from "./Video/VideoCard.jsx";
 import Container from "./Layout/Container.jsx";
 import VideoPlayer from "./Video/VideoPlayer.jsx";
+import VideoList from "./Video/VideoList.jsx";
+import NoVideosFound from "./Video/NoVideosFound.jsx";
 
 export {
   Logo,
@@ -28,4 +30,6 @@ export {
   VideoCard,
   Container,
   VideoPlayer,
+  VideoList,
+  NoVideosFound,
 };
