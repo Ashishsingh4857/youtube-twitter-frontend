@@ -8,37 +8,13 @@ import {
   FaVolumeMute,
 } from "react-icons/fa";
 
-function VideoPlayer({ videoData, className, ...props }) {
+function VideoPlayer({ videoFile, thumbnail, className, ...props }) {
   // player controls
   const [playing, setPlaying] = useState(false);
   const [volume, setVolume] = useState(0.8);
   const [muted, setMuted] = useState(false);
   const [progress, setProgress] = useState(0);
-  const [duration, setDuration] = useState(0);
   const playerRef = useRef(null);
-
-  const handlePlayPause = () => {
-    setPlaying(!playing);
-  };
-
-  const handleVolumeChange = (e) => {
-    setVolume(parseFloat(e.target.value));
-  };
-  const handleFullScreen = () => {
-    playerRef.current.wrapper.requestFullscreen();
-  };
-
-  const handleMute = () => {
-    setMuted(!muted);
-  };
-
-  const handleProgress = (state) => {
-    setProgress(state.played);
-  };
-
-  const handleDuration = (duration) => {
-    setDuration(duration);
-  };
 
   const handleSeek = (e) => {
     const seekValue = parseFloat(e.target.value);
@@ -48,11 +24,11 @@ function VideoPlayer({ videoData, className, ...props }) {
   return (
     <>
       <div
-        className={`relative aspect-video  w-full h-full object-contain rounded-lg overflow-hidden bg-gray-900 ${className}`}
+        className={`relative aspect-video w-full h-full object-contain rounded-lg overflow-hidden bg-gray-900 ${className}`}
       >
         <ReactPlayer
           ref={playerRef}
-          src={videoData.videoFile?.url}
+          src={videoFile}
           playing={playing}
           volume={volume}
           muted={muted}
@@ -60,9 +36,8 @@ function VideoPlayer({ videoData, className, ...props }) {
           width="100%"
           height="100%"
           autoPlay
-          light={videoData.thumbnail.url}
-          onProgress={handleProgress}
-          onReady={handleDuration}
+          light={thumbnail}
+          onProgress={(state) => setProgress(state.played)}
           {...props}
         />
         {/* controllers */}
@@ -79,14 +54,14 @@ function VideoPlayer({ videoData, className, ...props }) {
           />
           <div className="w-full flex justify-between items-center mb-2">
             <button
-              onClick={handlePlayPause}
+              onClick={() => setPlaying(!playing)}
               className="text-white uppercase hover:text-gray-300 p-2 rounded-full hover:bg-gray-800"
             >
               {playing ? <FaPause size={20} /> : <FaPlay size={20} />}
             </button>
             <div className="flex items-center">
               <button
-                onClick={handleMute}
+                onClick={() => setMuted(!muted)}
                 className="text-white uppercase hover:text-gray-300 p-2 rounded-full hover:bg-gray-800"
               >
                 {muted ? <FaVolumeMute size={20} /> : <FaVolumeUp size={20} />}
@@ -97,12 +72,12 @@ function VideoPlayer({ videoData, className, ...props }) {
                 max={1}
                 step="any"
                 value={volume}
-                onChange={handleVolumeChange}
+                onChange={(e) => setVolume(parseFloat(e.target.value))}
                 className="w-20"
               />
             </div>
             <button
-              onClick={handleFullScreen}
+              onClick={() => playerRef.current.wrapper.requestFullscreen()}
               className="text-white uppercase hover:text-gray-300 p-2 rounded-full hover:bg-gray-800"
             >
               <FaExpand size={20} />

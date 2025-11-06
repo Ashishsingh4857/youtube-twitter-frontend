@@ -20,7 +20,7 @@ function VideoDetail() {
 
   const dispatch = useDispatch();
   const { videoId } = useParams();
-  const video = useSelector((state) => state.video?.video);
+  const { video } = useSelector((state) => state.video);
 
   useEffect(() => {
     if (videoId) {
@@ -30,13 +30,12 @@ function VideoDetail() {
 
   if (!video || video.length === 0) return <div>Loading...</div>;
 
-  const videoData = video[0];
+  const [videoData] = video;
 
-  const toggleDescription = () => {
-    setShowFullDescription(!showFullDescription);
-  };
+  const { title, views, createdAt, description, owner, videoFile, thumbnail } =
+    videoData;
 
-  const truncatedDescription = videoData?.description.substring(0, 50) + "...";
+  const truncatedDescription = description.substring(0, 50) + "...";
 
   return (
     <>
@@ -46,25 +45,26 @@ function VideoDetail() {
         {videoData && (
           <div className="flex-1 h-full md:pr-4">
             {/* video player */}
-            <VideoPlayer videoData={videoData} />
+            <VideoPlayer
+              videoFile={videoFile?.url}
+              thumbnail={thumbnail?.url}
+            />
             {/* title section */}
             <div className="pt-4 px-3 pb-1">
-              <h1 className="text-xl text-white font-bold">
-                {videoData.title}
-              </h1>
+              <h1 className="text-xl text-white font-bold">{title}</h1>
               <p className="text-gray-400 text-xs mt-1">
-                {videoData.views} views • {videoData.createdAt}
+                {views} views • {createdAt}
               </p>
               {showFullDescription ? (
                 <p className="mt-2 text-gray-300 text-xs transition-all duration-300 ease-in-out">
-                  {videoData.description}
+                  {description}
                 </p>
               ) : (
                 <p className="mt-2 text-gray-300 text-xs">
                   {truncatedDescription}
                   <button
                     className="text-xs text-gray-500 hover:text-gray-700 transition-colors duration-200"
-                    onClick={toggleDescription}
+                    onClick={() => setShowFullDescription(!showFullDescription)}
                   >
                     More
                   </button>
@@ -73,7 +73,7 @@ function VideoDetail() {
               {showFullDescription && (
                 <button
                   className="text-xs text-gray-500 hover:text-gray-700 transition-colors duration-200"
-                  onClick={toggleDescription}
+                  onClick={() => setShowFullDescription(!showFullDescription)}
                 >
                   Show Less
                 </button>
@@ -84,15 +84,15 @@ function VideoDetail() {
               <div className="flex flex-wrap justify-between py-2 px-4">
                 <div className="flex flex-wrap items-center">
                   <img
-                    src={videoData?.owner?.avatar?.url}
+                    src={owner?.avatar?.url}
                     alt="Channel Avatar"
                     className="w-8 h-8 rounded-full"
                   />
                   <span className="ml-4 text-white text-sm">
-                    {videoData?.owner?.username}
+                    {owner?.username}
                   </span>
                   <span className="ml-2 text-xs text-gray-400">
-                    {videoData?.owner?.subscribersCount} Subscribers
+                    {owner?.subscribersCount} Subscribers
                   </span>
                 </div>
                 <div className="lg:ml-4">
@@ -144,12 +144,11 @@ function VideoDetail() {
                 </div>
               </div>
             </div>
-
             {/* comments */}
           </div>
         )}
         {/* video List */}
-        <div className="w-full md:w-[400px] h-full mt-4 md:mt-0"></div>
+        <div className="w-full md:w-[400px] h-full mt-4 md:mt-0"> </div>
       </div>
     </>
   );
