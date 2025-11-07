@@ -102,7 +102,7 @@ const Navbar = () => {
           <AiOutlineSearch className="text-2xl text-gray-400 hover:text-white transition-colors" />
         </button>
       </div>
-      <div className="flex items-center">
+      <div>
         {userData ? (
           <div className="relative">
             <img
@@ -122,13 +122,21 @@ const Navbar = () => {
                 setIsActive={(value) =>
                   dispatch(setIsProfileDropdownOpen(value))
                 }
-                avatar={userData?.avatar?.url}
-                username={userData?.username}
-                fullName={userData?.fullName}
+                avatar={userData.avatar?.url}
+                username={userData.username}
+                fullName={userData.fullName}
               />
             )}
           </div>
-        ) : null}
+        ) : (
+          <button
+            className="flex items-center justify-center px-4 py-2 text-sm font-medium text-white border border-white rounded-full hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            onClick={() => navigate("/login")}
+          >
+            <AiOutlineUser className="mr-2" />
+            Sign in
+          </button>
+        )}
       </div>
     </nav>
   );
