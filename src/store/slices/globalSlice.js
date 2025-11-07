@@ -4,6 +4,9 @@ const initialState = {
   sidebar: {
     isOpen: true, // toggle sidebar
   },
+  navbar: {
+    isProfileDropdownOpen: false,
+  },
 };
 
 const globalSlice = createSlice({
@@ -13,8 +16,11 @@ const globalSlice = createSlice({
     toggleSidebar: (state) => {
       state.sidebar.isOpen = !state.sidebar.isOpen;
     },
+    setIsProfileDropdownOpen: (state, action) => {
+      state.navbar.isProfileDropdownOpen = action.payload;
+    },
   },
 });
 
-export const { toggleSidebar } = globalSlice.actions;
+export const { toggleSidebar, setIsProfileDropdownOpen } = globalSlice.actions;
 export default globalSlice.reducer;

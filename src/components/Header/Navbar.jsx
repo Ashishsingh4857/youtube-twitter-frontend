@@ -1,34 +1,66 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { userLogout } from "../../store/slices/authSlice.js";
 import { AiOutlineSearch, AiOutlineMenu } from "react-icons/ai";
-import { Logo, Input, Button } from "../index.js";
+import { Logo, Input, Button, DropdownMenu } from "../index.js";
 import { useForm } from "react-hook-form";
-import { toggleSidebar } from "../../store/slices/globalSlice.js";
+import {
+  toggleSidebar,
+  setIsProfileDropdownOpen,
+} from "../../store/slices/globalSlice.js";
 import { MdMenuOpen } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
+// icons
+import {
+  AiOutlineUser,
+  AiOutlineSetting,
+  AiOutlineLogout,
+  AiOutlineVideoCamera,
+  AiOutlineCreditCard,
+} from "react-icons/ai";
+import { FaRegMoon } from "react-icons/fa";
 
 const Navbar = () => {
   const dispatch = useDispatch();
   const { userData } = useSelector((state) => state.auth);
   const { register, handleSubmit } = useForm();
   const [showSearch, setShowSearch] = useState(false);
+  // toggle
+  const { sidebar, navbar } = useSelector((state) => state.global);
+  const navigate = useNavigate();
 
   //logged the user
   const handleLogout = () => {
     dispatch(userLogout());
   };
-  ////toggle sidebar
-  const { isOpen } = useSelector((state) => state.global.sidebar);
+
   //search
   const onSubmit = async (data) => {
     console.log("Searching for:", data.searchQuery);
   };
 
+  // avatar dropdown icons and options
+  const profileOptions = [
+    { text: "Google Account" },
+    { text: "Switch account" },
+    { text: "Sign out", onClick: handleLogout },
+    { text: "Creator Studio", onClick: () => navigate("/studio") },
+    { text: "Appearance: Dark" },
+    { text: "Purchases and memberships" },
+  ];
+  const icons = {
+    "Google Account": <AiOutlineUser size={18} />,
+    "Switch account": <AiOutlineSetting size={18} />,
+    "Sign out": <AiOutlineLogout size={18} />,
+    "Creator Studio": <AiOutlineVideoCamera size={18} />,
+    "Appearance: Dark": <FaRegMoon size={18} />,
+    "Purchases and memberships": <AiOutlineCreditCard size={18} />,
+  };
+
   return (
-    <nav className="w-full h-14 p-3 flex justify-between items-center bg-gray-900 border-b border-gray-800 shadow-md fixed top-0  z-10">
+    <nav className="w-full h-14 p-3 flex justify-between items-center bg-gray-900 border-b border-gray-800 shadow-md fixed top-0 z-10">
       <div className="flex items-center">
-        {isOpen ? (
+        {sidebar.isOpen ? (
           <>
             <MdMenuOpen
               className="text-2xl mr-4 cursor-pointer text-gray-400 hover:text-white transition-colors"
@@ -48,9 +80,7 @@ const Navbar = () => {
       <div className="flex-grow flex justify-center">
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className={`flex items-center ${
-            showSearch ? "w-full" : "hidden"
-          } sm:w-1/2 sm:flex`}
+          className={`flex items-center ${showSearch ? "w-full" : "hidden"} sm:w-1/2 sm:flex`}
         >
           <Input
             type="search"
@@ -74,33 +104,31 @@ const Navbar = () => {
       </div>
       <div className="flex items-center">
         {userData ? (
-          <div className="flex items-center">
+          <div className="relative">
             <img
               src={userData.avatar?.url}
               alt="avatar"
-              className="w-8 h-8 rounded-full  sm:block"
+              className="w-8 h-8 rounded-full sm:block cursor-pointer"
+              onClick={() =>
+                dispatch(
+                  setIsProfileDropdownOpen(!navbar.isProfileDropdownOpen)
+                )
+              }
             />
-            <span className="ml-4 text-sm italic font-medium text-white hidden sm:block">
-              {userData.fullName}
-            </span>
-            <Button
-              onClick={handleLogout}
-              className="ml-4 relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800"
-            >
-              <span className="relative px-5 py-1 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-transparent group-hover:dark:bg-transparent">
-                logout
-              </span>
-            </Button>
+            {navbar.isProfileDropdownOpen && (
+              <DropdownMenu
+                options={profileOptions}
+                icons={icons}
+                setIsActive={(value) =>
+                  dispatch(setIsProfileDropdownOpen(value))
+                }
+                avatar={userData?.avatar?.url}
+                username={userData?.username}
+                fullName={userData?.fullName}
+              />
+            )}
           </div>
-        ) : (
-          <Link to="/login">
-            <Button className="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800">
-              <span className="relative px-5 py-1 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-transparent group-hover:dark:bg-transparent">
-                sign in
-              </span>
-            </Button>
-          </Link>
-        )}
+        ) : null}
       </div>
     </nav>
   );

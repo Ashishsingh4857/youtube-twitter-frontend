@@ -14,6 +14,7 @@ import Container from "./Layout/Container.jsx";
 import VideoPlayer from "./Video/VideoPlayer.jsx";
 import VideoList from "./Video/VideoList.jsx";
 import NoVideosFound from "./Video/NoVideosFound.jsx";
+import DropdownMenu from "./elements/DropdownMenu.jsx";
 
 export {
   Logo,
@@ -32,4 +33,5 @@ export {
   VideoPlayer,
   VideoList,
   NoVideosFound,
+  DropdownMenu,
 };
