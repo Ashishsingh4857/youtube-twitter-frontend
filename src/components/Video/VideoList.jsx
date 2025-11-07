@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { AiOutlineClockCircle } from "react-icons/ai";
+import { useNavigate } from "react-router-dom";
 
 function VideoList({
   thumbnail,
@@ -11,11 +12,13 @@ function VideoList({
   createdAt,
   videoId,
 }) {
+  const navigate = useNavigate();
   return (
     <>
       <div
         key={videoId}
         className="flex flex-col md:flex-row items-center cursor-pointer "
+        onClick={() => navigate(`/watch/${videoId}`)}
       >
         <div className="md:w-42 relative">
           <img
