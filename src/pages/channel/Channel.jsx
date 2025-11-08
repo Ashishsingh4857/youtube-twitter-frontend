@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { userChannelProfile } from "../../store/slices/userSlice.js";
+import { Button } from "../../components/index.js";
 const UserChannelProfile = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { username } = useParams();
 
   const [isOwnProfile, setIsOwnProfile] = useState(false); // toggle subscribe btn
@@ -29,6 +31,37 @@ const UserChannelProfile = () => {
     compareUser();
   }, [username, userData]);
 
+  // fallback url for avatar and coverImage
+  const DEFAULT_AVATAR_URL =
+    "https://res.cloudinary.com/ashishsingh4857/image/upload/v1762338092/rhg4ffc6zlc7txxofok2.jpg";
+  const DEFAULT_COVER_IMAGE_URL =
+    "https://res.cloudinary.com/ashishsingh4857/image/upload/v1762634381/synthwave-vaporwave-retrowave-cyber-background-600nw-1457569313_b3z64m.webp";
+
+  //user account management buttons
+  const buttons = [
+    {
+      label: isSubscribed ? "subscribed" : "Subscribe",
+      className:
+        "bg-[#A855F7] rounded-full px-2 py-2 text-xs md:text-sm lg:text-base md:px-4 md:py-2",
+      onClick: () => console.log("Subscribe button clicked"),
+      show: !isOwnProfile,
+    },
+    {
+      label: "customize channel",
+      className:
+        "bg-gray-700 rounded-full px-2 py-2 text-xs md:text-sm lg:text-base md:px-4 md:py-2",
+      onClick: () => navigate(`/studio/${username}/profile`),
+      show: isOwnProfile,
+    },
+    {
+      label: "Manage videos",
+      className:
+        "bg-gray-700 rounded-full px-2 py-2 text-xs md:text-sm lg:text-base md:px-4 md:py-2",
+      onClick: () => navigate(`/studio/${username}/videos`),
+      show: isOwnProfile,
+    },
+  ];
+
   return (
     <div
       className={`p-2 md:p-4 lg:p-6 h-full w-full bg-gray-900 mt-14 overflow-y-auto ${
@@ -37,7 +70,7 @@ const UserChannelProfile = () => {
     >
       <div className="h-30 md:h-48 bg-gray-200 mx-4 md:mx-8 lg:mx-16">
         <img
-          src={coverImage?.url || coverImage}
+          src={coverImage?.url || coverImage || DEFAULT_COVER_IMAGE_URL}
           alt="Cover Photo"
           className="w-full h-full object-cover"
         />
@@ -45,7 +78,7 @@ const UserChannelProfile = () => {
       <div className="container  md:mx-auto p-4">
         <div className="flex flex-row items-center space-x-4  flex-wrap justify-center sm:justify-between">
           <img
-            src={avatar?.url || avatar}
+            src={avatar?.url || avatar || DEFAULT_AVATAR_URL}
             alt={fullName}
             className="w-30 h-30 md:w-40 md:h-40 rounded-full object-cover -mt-8 md:-mt-10 border-4 border-white"
           />
@@ -58,15 +91,24 @@ const UserChannelProfile = () => {
               <p className="text-sm text-gray-500 md:ml-2">
                 {subscribersCount} subscribers
               </p>
-              <p className="text-sm text-gray-500 md:ml-2">100 video</p>
+              <p className="text-sm text-gray-500 md:ml-2">video</p>
             </div>
           </div>
           {/* show the subscribe button only if logged in  user is not equal to userprofile user */}
-          {!isOwnProfile && (
-            <button className=" px-2 py-2 text-xs md:text-sm lg:text-base md:px-4 md:py-2 bg-[#A855F7] text-white rounded-full hover:bg-[#a955f7c4]">
-              {isSubscribed ? "subscribed" : "Subscribe"}
-            </button>
-          )}
+          <div className="  mt-4 sm:mt-0 flex space-x-4">
+            {buttons.map(
+              (button, index) =>
+                button.show && (
+                  <Button
+                    key={index}
+                    className={button.className}
+                    onClick={button.onClick}
+                  >
+                    {button.label}
+                  </Button>
+                )
+            )}
+          </div>
         </div>
         <div className="flex space-x-4 mt-4 border-b border-gray-200 ">
           <button
