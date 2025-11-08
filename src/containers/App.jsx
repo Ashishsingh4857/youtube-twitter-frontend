@@ -6,6 +6,7 @@ import {
   Layout,
   ProtectedRoute,
   PublicRoute,
+  StudioLayout,
 } from "../components/index.js";
 import { HomePage, VideoDetail, Channel } from "../pages/index.js";
 import { useDispatch } from "react-redux";
@@ -47,6 +48,9 @@ function App() {
             </ProtectedRoute>
           }
         />
+        {/* studio */}
+        <Route path="/studio" element={<StudioLayout />}></Route>
+        {/* auth */}
         <Route
           path="/login"
           element={

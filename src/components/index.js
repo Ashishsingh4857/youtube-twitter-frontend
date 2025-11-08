@@ -15,6 +15,10 @@ import VideoPlayer from "./Video/VideoPlayer.jsx";
 import VideoList from "./Video/VideoList.jsx";
 import NoVideosFound from "./Video/NoVideosFound.jsx";
 import DropdownMenu from "./elements/DropdownMenu.jsx";
+//studio
+import StudioNavbar from "./studio/StudioNavbar.jsx";
+import StudioSidebar from "./studio/StudioSidebar.jsx";
+import StudioLayout from "./studio/StudioLayout.jsx";
 
 export {
   Logo,
@@ -34,4 +38,7 @@ export {
   VideoList,
   NoVideosFound,
   DropdownMenu,
+  StudioNavbar,
+  StudioSidebar,
+  StudioLayout,
 };
