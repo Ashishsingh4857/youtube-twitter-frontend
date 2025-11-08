@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllVideos, getVideoById } from "../store/slices/videoSlice.js";
 import {
@@ -25,7 +25,7 @@ function VideoDetail() {
   const [isLiked, setIsLiked] = useState(false);
   const [isDisliked, setIsDisliked] = useState(false);
   const [isShared, setIsShared] = useState(false);
-
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { videoId } = useParams();
   // single video doc
@@ -113,7 +113,10 @@ function VideoDetail() {
             {/* channel details section */}
             <div className="lg:flex lg:justify-between ">
               <div className="flex flex-wrap justify-between py-2 px-4">
-                <div className="flex flex-wrap items-center">
+                <div
+                  className="flex flex-wrap items-center cursor-pointer"
+                  onClick={() => navigate(`/channel/${owner?.username}`)}
+                >
                   <img
                     src={owner?.avatar?.url}
                     alt="Channel Avatar"
