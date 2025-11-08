@@ -49,7 +49,7 @@ const UserChannelProfile = () => {
             alt={fullName}
             className="w-30 h-30 md:w-40 md:h-40 rounded-full object-cover -mt-8 md:-mt-10 border-4 border-white"
           />
-          <div className="mt-4  md:mt-0">
+          <div className="mt-4 md:mt-0 flex-grow">
             <h1 className="text-xl md:text-2xl font-bold text-white">
               {fullName}
             </h1>
@@ -63,7 +63,7 @@ const UserChannelProfile = () => {
           </div>
           {/* show the subscribe button only if logged in  user is not equal to userprofile user */}
           {!isOwnProfile && (
-            <button className="sm:ml-auto px-2 py-2 text-xs md:text-sm lg:text-base md:px-4 md:py-2 bg-[#A855F7] text-white rounded-full hover:bg-[#a955f7c4]">
+            <button className=" px-2 py-2 text-xs md:text-sm lg:text-base md:px-4 md:py-2 bg-[#A855F7] text-white rounded-full hover:bg-[#a955f7c4]">
               {isSubscribed ? "subscribed" : "Subscribe"}
             </button>
           )}
@@ -110,6 +110,9 @@ const UserChannelProfile = () => {
           <div className="mt-4">
             <h2 className="text-lg font-bold text-gray-800">Videos</h2>
             {/* <!-- Video list content  --> */}
+            <h3 className="text-gray-800">
+              owner wise videos filter functionality coming soon..
+            </h3>
           </div>
         )}
         {activeTab === "playlists" && (
