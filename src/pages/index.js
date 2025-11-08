@@ -1,3 +1,4 @@
 import HomePage from "./HomePage.jsx";
 import VideoDetail from "./VideoDetail.jsx";
-export { HomePage, VideoDetail };
+import Channel from "./channel/Channel.jsx";
+export { HomePage, VideoDetail, Channel };
