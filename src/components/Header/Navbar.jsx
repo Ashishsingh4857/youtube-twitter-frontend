@@ -19,6 +19,7 @@ import {
   AiOutlineCreditCard,
 } from "react-icons/ai";
 import { FaRegMoon } from "react-icons/fa";
+import ClickAwayListener from "react-click-away-listener";
 
 const Navbar = () => {
   const dispatch = useDispatch();
@@ -41,10 +42,10 @@ const Navbar = () => {
 
   // avatar dropdown icons and options
   const profileOptions = [
-    { text: "Google Account" },
-    { text: "Switch account" },
     { text: "Sign out", onClick: handleLogout },
     { text: "Creator Studio", onClick: () => navigate("/studio") },
+    { text: "Google Account" },
+    { text: "Switch account" },
     { text: "Appearance: Dark" },
     { text: "Purchases and memberships" },
   ];
@@ -116,16 +117,22 @@ const Navbar = () => {
               }
             />
             {navbar.isProfileDropdownOpen && (
-              <DropdownMenu
-                options={profileOptions}
-                icons={icons}
-                setIsActive={(value) =>
-                  dispatch(setIsProfileDropdownOpen(value))
-                }
-                avatar={userData.avatar?.url}
-                username={userData.username}
-                fullName={userData.fullName}
-              />
+              <ClickAwayListener
+                onClickAway={() => dispatch(setIsProfileDropdownOpen(false))}
+              >
+                <div onClick={(e) => e.stopPropagation()}>
+                  <DropdownMenu
+                    options={profileOptions}
+                    icons={icons}
+                    setIsActive={(value) =>
+                      dispatch(setIsProfileDropdownOpen(value))
+                    }
+                    avatar={userData.avatar?.url}
+                    username={userData.username}
+                    fullName={userData.fullName}
+                  />
+                </div>
+              </ClickAwayListener>
             )}
           </div>
         ) : (
