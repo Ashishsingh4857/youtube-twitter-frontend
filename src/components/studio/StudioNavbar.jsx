@@ -14,6 +14,7 @@ import { useNavigate } from "react-router-dom";
 import { AiOutlineSetting, AiOutlineLogout } from "react-icons/ai";
 import { FaRegMoon } from "react-icons/fa";
 import { PiVideoDuotone } from "react-icons/pi";
+import { toggleStudioSidebar } from "../../store/slices/globalSlice.js";
 
 const StudioNavbar = () => {
   const dispatch = useDispatch();
@@ -25,6 +26,8 @@ const StudioNavbar = () => {
   const [isStudioProfileDropdownOpen, setIsStudioProfileDropdownOpen] =
     useState(false);
 
+  // toggle sidebar
+  const { isActive } = useSelector((state) => state.global.sidebar);
   // search handler
   const onSubmit = (data) => {
     console.log("Searching for:", data.searchQuery);
@@ -59,7 +62,10 @@ const StudioNavbar = () => {
       <div className="flex items-center">
         {/* sidebar toggle button */}
         <Button className="mr-4 bg-gray-700 p-2 rounded-full hover:bg-gray-600 cursor-pointer">
-          <FiMenu size={20} />
+          <FiMenu
+            size={20}
+            onClick={() => dispatch(toggleStudioSidebar(!isActive))}
+          />
         </Button>
         <div className="flex items-center">
           <Logo text={false} />
