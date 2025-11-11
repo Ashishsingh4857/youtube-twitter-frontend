@@ -50,14 +50,14 @@ const UserChannelProfile = () => {
       label: "customize channel",
       className:
         "bg-gray-700 rounded-full px-2 py-2 text-xs md:text-sm lg:text-base md:px-4 md:py-2",
-      onClick: () => navigate(`/studio/${username}/profile`),
+      onClick: () => navigate(`/studio/${username}/customization`),
       show: isOwnProfile,
     },
     {
       label: "Manage videos",
       className:
         "bg-gray-700 rounded-full px-2 py-2 text-xs md:text-sm lg:text-base md:px-4 md:py-2",
-      onClick: () => navigate(`/studio/${username}/videos`),
+      onClick: () => navigate(`/studio/${username}/content`),
       show: isOwnProfile,
     },
   ];

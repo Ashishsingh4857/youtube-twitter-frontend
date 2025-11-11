@@ -30,47 +30,47 @@ const StudioSidebar = () => {
     {
       name: "Dashboard",
       icon: <AiOutlineDashboard size={25} />,
-      path: "/studio/dashboard",
+      path: `/studio/${username}/dashboard`,
     },
     {
       name: "Content",
       icon: <AiOutlineVideoCamera size={25} />,
-      path: "/studio/content",
+      path: `/studio/${username}/content`,
     },
     {
       name: "Analytics",
       icon: <AiOutlineBarChart size={25} />,
-      path: "/studio/analytics",
+      path: `/studio/${username}/analytics`,
     },
     {
       name: "Community",
       icon: <AiOutlineUsergroupAdd size={25} />,
-      path: "/studio/community",
+      path: `/studio/${username}/community`,
     },
     {
       name: "Subtitles",
       icon: <AiOutlineFileText size={25} />,
-      path: "/studio/subtitles",
+      path: `/studio/${username}//subtitles`,
     },
     {
       name: "Content detection",
       icon: <AiOutlineCopyright size={25} />,
-      path: "/studio/content-detection",
+      path: `/studio/${username}/content-detection`,
     },
     {
       name: "Earn",
       icon: <AiOutlineDollar size={25} />,
-      path: "/studio/earn",
+      path: `/studio/${username}/earn`,
     },
     {
       name: "Customization",
       icon: <AiOutlineEdit size={25} />,
-      path: "/studio/customization",
+      path: `/studio/${username}/customization`,
     },
     {
       name: "Audio library",
       icon: <AiOutlineAudio size={25} />,
-      path: "/studio/audio-library",
+      path: `/studio/${username}/audio-library`,
     },
   ];
 
@@ -79,18 +79,18 @@ const StudioSidebar = () => {
     {
       name: "Settings",
       icon: <AiOutlineSetting size={25} />,
-      path: "/studio/settings",
+      path: `/studio/${username}/settings`,
     },
     {
       name: "Send feedback",
       icon: <AiOutlineMessage size={25} />,
-      path: "/studio/feedback",
+      path: `/studio/${username}/feedback`,
     },
   ];
 
   return (
     <aside
-      className={`bg-gray-900 text-white h-screen p-4 flex flex-col justify-between fixed top-16 left-0 ${isActive ? "w-64" : "w-18"}`}
+      className={`bg-gray-900 text-white h-full p-4 flex flex-col justify-between fixed  z-10 ${isActive ? "w-64" : "w-18"}`}
     >
       <div>
         <div className="mb-4">
