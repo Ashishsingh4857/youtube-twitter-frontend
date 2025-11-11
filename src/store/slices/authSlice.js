@@ -93,7 +93,7 @@ export const updateCoverImg = createAsyncThunk(
   async (coverImage) => {
     try {
       const response = await axiosInstance.patch(
-        "/users/update-coverImg",
+        "/users/update-cover-image",
         coverImage
       );
       toast.success(response.data?.message);
@@ -109,7 +109,7 @@ export const updateUserDetails = createAsyncThunk(
   "updateUserDetails",
   async (data) => {
     try {
-      const response = await axiosInstance.patch("/users/update-user", data);
+      const response = await axiosInstance.patch("/users/update-account", data);
       toast.success(response.data?.message);
       return response.data;
     } catch (error) {
