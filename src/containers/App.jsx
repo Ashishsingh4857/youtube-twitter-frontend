@@ -8,7 +8,12 @@ import {
   PublicRoute,
   StudioLayout,
 } from "../components/index.js";
-import { HomePage, VideoDetail, Channel } from "../pages/index.js";
+import {
+  HomePage,
+  VideoDetail,
+  Channel,
+  ProfileCustomization,
+} from "../pages/index.js";
 import { useDispatch } from "react-redux";
 import { getCurrentUser } from "../store/slices/authSlice.js";
 import { ToastContainer } from "react-toastify";
@@ -49,7 +54,12 @@ function App() {
           }
         />
         {/* studio */}
-        <Route path="/studio" element={<StudioLayout />}></Route>
+        <Route path="/studio" element={<StudioLayout />}>
+          <Route
+            path="/studio/:username/customization"
+            element={<ProfileCustomization />}
+          />
+        </Route>
         {/* auth */}
         <Route
           path="/login"
