@@ -1,44 +1,22 @@
 // this is a custom hook used to discard the from changes
-// expecting parameters fields
-//   const exampleFields = {
-//     avatar: { type: "file" },
-//     coverPhoto: { type: "file" },
-//     email: { type: "text" },
-//     fullName: { type: "text" },
-//     username: { type: "text" },
-//     reset, // =>  rect hook from
-//   };
-import { useRef, useCallback } from "react";
+import { useCallback } from "react";
+import { useFormContext } from "react-hook-form";
 
-const useDiscardChanges = (fields) => {
-  const inputRefs = useRef({});
-
+const useDiscardChanges = (reset, getValues) => {
   const handleDiscardChanges = useCallback(() => {
-    Object.keys(fields).forEach((fieldName) => {
-      if (inputRefs.current[fieldName]) {
-        if (fields[fieldName].type === "file") {
-          URL.revokeObjectURL(inputRefs.current[fieldName].current);
+    const values = getValues();
+    if (values && typeof values === "object") {
+      Object.keys(values).forEach((fieldName) => {
+        if (values[fieldName] instanceof FileList) {
+          // Revoke object URL for file inputs
+          URL.revokeObjectURL(values[fieldName][0]);
         }
-        inputRefs.current[fieldName].current = null;
-      }
-    });
+      });
+    }
+    reset();
+  }, [getValues, reset]);
 
-    fields.reset();
-  }, [fields]);
-
-  const registerInputRef = (fieldName, type) => {
-    inputRefs.current[fieldName] = useRef(null);
-    return {
-      ref: inputRefs.current[fieldName],
-      onChange: (e) => {
-        if (type === "file") {
-          inputRefs.current[fieldName].current = e.target.files[0];
-        }
-      },
-    };
-  };
-
-  return { handleDiscardChanges, registerInputRef };
+  return { handleDiscardChanges };
 };
 
 export default useDiscardChanges;
