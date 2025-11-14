@@ -11,6 +11,7 @@ import {
   updateCoverImg,
 } from "../../../store/slices/authSlice.js";
 import useDiscardChanges from "../../../hooks/useDiscardChanges.js";
+import useFileSizeCheck from "../../../hooks/useFileSizeCheck.js";
 
 const ProfileCustomization = () => {
   const dispatch = useDispatch();
@@ -54,7 +55,22 @@ const ProfileCustomization = () => {
     selectedCoverPhoto,
     setSelectedCoverPhoto,
   });
+  // checkering the uploading file size
+  const avatarMaxSize = 1; // 4 MB
+  const coverPhotoMaxSize = 1; // 6 MB
 
+  const {
+    isSizeExceeded: isAvatarSizeExceeded,
+    errorMessage: avatarErrorMessage,
+  } = useFileSizeCheck(avatarMaxSize, selectedAvatar);
+  const {
+    isSizeExceeded: isCoverPhotoSizeExceeded,
+    errorMessage: coverPhotoErrorMessage,
+  } = useFileSizeCheck(coverPhotoMaxSize, selectedCoverPhoto);
+  console.log(isAvatarSizeExceeded, avatarErrorMessage);
+  console.log(isCoverPhotoSizeExceeded, coverPhotoErrorMessage);
+
+  // submit the from
   const onSubmit = async (data) => {
     if (
       !selectedEmail &&
@@ -190,11 +206,17 @@ const ProfileCustomization = () => {
                 />
               </label>
             </div>
-            <p className="text-gray-500">
+            <p className="text-gray-500 my-4">
               It’s recommended to use a avatar picture that’s at least 98 x 98
               pixels and 4MB or less. Use a PNG or GIF (no animations) file.
               Make sure your picture follows the YouTube Community Guidelines.
             </p>
+            {isAvatarSizeExceeded && (
+              <p className="text-red-500 mb-2">{avatarErrorMessage}</p>
+            )}
+            {isCoverPhotoSizeExceeded && (
+              <p className="text-red-500 mb-2">{coverPhotoErrorMessage}</p>
+            )}
           </div>
 
           {/* select field to update */}
@@ -298,7 +320,12 @@ const ProfileCustomization = () => {
           <Button
             type="submit"
             form="ProfileCustomizationForm"
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full shadow-lg"
+            className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full shadow-lg ${
+              isAvatarSizeExceeded || isCoverPhotoSizeExceeded
+                ? "opacity-50 cursor-not-allowed"
+                : ""
+            }`}
+            disabled={isAvatarSizeExceeded || isCoverPhotoSizeExceeded}
           >
             Save Changes
           </Button>
