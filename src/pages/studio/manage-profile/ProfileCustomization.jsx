@@ -12,6 +12,7 @@ import {
 } from "../../../store/slices/authSlice.js";
 import useDiscardChanges from "../../../hooks/useDiscardChanges.js";
 import useFileSizeCheck from "../../../hooks/useFileSizeCheck.js";
+import useFileTypeCheck from "../../../hooks/useFileTypeCheck.js";
 
 const ProfileCustomization = () => {
   const dispatch = useDispatch();
@@ -67,8 +68,20 @@ const ProfileCustomization = () => {
     isSizeExceeded: isCoverPhotoSizeExceeded,
     errorMessage: coverPhotoErrorMessage,
   } = useFileSizeCheck(coverPhotoMaxSize, selectedCoverPhoto);
-  console.log(isAvatarSizeExceeded, avatarErrorMessage);
-  console.log(isCoverPhotoSizeExceeded, coverPhotoErrorMessage);
+
+  // checkering the uploading file type
+  const acceptedAvatarTypes = ["image/jpeg", "image/png", "image/webp"];
+  const acceptedCoverPhotoTypes = ["image/jpeg", "image/png"];
+
+  const {
+    isFileTypeValid: isAvatarTypeValid,
+    errorMessage: avatarTypeErrorMessage,
+  } = useFileTypeCheck(acceptedAvatarTypes, selectedAvatar);
+  const {
+    isFileTypeValid: isCoverPhotoTypeValid,
+    errorMessage: coverPhotoTypeErrorMessage,
+  } = useFileTypeCheck(acceptedCoverPhotoTypes, selectedCoverPhoto);
+  console.log(isAvatarTypeValid);
 
   // submit the from
   const onSubmit = async (data) => {
@@ -211,11 +224,19 @@ const ProfileCustomization = () => {
               pixels and 4MB or less. Use a PNG or GIF (no animations) file.
               Make sure your picture follows the YouTube Community Guidelines.
             </p>
+            {/* file size validation error */}
             {isAvatarSizeExceeded && (
               <p className="text-red-500 mb-2">{avatarErrorMessage}</p>
             )}
             {isCoverPhotoSizeExceeded && (
               <p className="text-red-500 mb-2">{coverPhotoErrorMessage}</p>
+            )}
+            {/* file type validation error */}
+            {!isAvatarTypeValid && (
+              <p className="text-red-500 mb-4">{avatarTypeErrorMessage}</p>
+            )}
+            {!isCoverPhotoTypeValid && (
+              <p className="text-red-500 mb-4">{coverPhotoTypeErrorMessage}</p>
             )}
           </div>
 
@@ -321,11 +342,19 @@ const ProfileCustomization = () => {
             type="submit"
             form="ProfileCustomizationForm"
             className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full shadow-lg ${
-              isAvatarSizeExceeded || isCoverPhotoSizeExceeded
+              isAvatarSizeExceeded ||
+              isCoverPhotoSizeExceeded ||
+              !isAvatarTypeValid ||
+              !isCoverPhotoTypeValid
                 ? "opacity-50 cursor-not-allowed"
                 : ""
             }`}
-            disabled={isAvatarSizeExceeded || isCoverPhotoSizeExceeded}
+            disabled={
+              isAvatarSizeExceeded ||
+              isCoverPhotoSizeExceeded ||
+              !isAvatarTypeValid ||
+              !isCoverPhotoTypeValid
+            }
           >
             Save Changes
           </Button>
