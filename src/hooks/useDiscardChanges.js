@@ -1,20 +1,42 @@
-// this is a custom hook used to discard the from changes
 import { useCallback } from "react";
-import { useFormContext } from "react-hook-form";
 
-const useDiscardChanges = (reset, getValues) => {
+const useDiscardChanges = (getValues, reset, options = {}) => {
+  const {
+    avatarPreview,
+    coverPhotoPreview,
+    setAvatarPreview,
+    setCoverPhotoPreview,
+    selectedAvatar,
+    setSelectedAvatar,
+    selectedCoverPhoto,
+    setSelectedCoverPhoto,
+  } = options;
+
   const handleDiscardChanges = useCallback(() => {
-    const values = getValues();
-    if (values && typeof values === "object") {
-      Object.keys(values).forEach((fieldName) => {
-        if (values[fieldName] instanceof FileList) {
-          // Revoke object URL for file inputs
-          URL.revokeObjectURL(values[fieldName][0]);
-        }
-      });
+    reset(getValues());
+
+    if (avatarPreview && setAvatarPreview) {
+      URL.revokeObjectURL(avatarPreview);
+      setAvatarPreview(null);
     }
-    reset();
-  }, [getValues, reset]);
+
+    if (coverPhotoPreview && setCoverPhotoPreview) {
+      URL.revokeObjectURL(coverPhotoPreview);
+      setCoverPhotoPreview(null);
+    }
+
+    if (setSelectedAvatar) setSelectedAvatar(null);
+    if (setSelectedCoverPhoto) setSelectedCoverPhoto(null);
+  }, [
+    reset,
+    getValues,
+    avatarPreview,
+    coverPhotoPreview,
+    setAvatarPreview,
+    setCoverPhotoPreview,
+    setSelectedAvatar,
+    setSelectedCoverPhoto,
+  ]);
 
   return { handleDiscardChanges };
 };

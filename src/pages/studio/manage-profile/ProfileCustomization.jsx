@@ -36,13 +36,24 @@ const ProfileCustomization = () => {
   const [selectedEmail, setSelectedEmail] = useState(false);
   const [selectedFullName, setSelectedFullName] = useState(false);
   const [selectedUsername, setSelectedUsername] = useState(false);
+  const [avatarPreview, setAvatarPreview] = useState(null);
+  const [coverPhotoPreview, setCoverPhotoPreview] = useState(null);
   //validation errors
   const [error, setError] = useState(null);
 
   const avatarRef = useRef(null);
   const coverPhotoRef = useRef(null);
 
-  const { handleDiscardChanges } = useDiscardChanges(getValues, reset);
+  const { handleDiscardChanges } = useDiscardChanges(getValues, reset, {
+    avatarPreview,
+    coverPhotoPreview,
+    setAvatarPreview,
+    setCoverPhotoPreview,
+    selectedAvatar,
+    setSelectedAvatar,
+    selectedCoverPhoto,
+    setSelectedCoverPhoto,
+  });
 
   const onSubmit = async (data) => {
     if (
@@ -84,12 +95,14 @@ const ProfileCustomization = () => {
   const handleAvatarChange = (e) => {
     const file = e.target.files[0];
     setSelectedAvatar(file);
+    setAvatarPreview(URL.createObjectURL(file));
     setValue("avatar", file);
   };
 
   const handleCoverPhotoChange = (e) => {
     const file = e.target.files[0];
     setSelectedCoverPhoto(file);
+    setCoverPhotoPreview(URL.createObjectURL(file));
     setValue("coverPhoto", file);
   };
 
@@ -109,7 +122,7 @@ const ProfileCustomization = () => {
   return (
     <FormProvider {...methods}>
       <div
-        className={`bg-gray-900 w-full max-w-screen h-full text-white p-6 mt-16 ${
+        className={`bg-gray-900 w-full min-h-screen max-w-screen h-full text-white p-6 mt-16 ${
           isActive ? "ml-64" : "ml-16"
         }`}
       >
@@ -124,7 +137,7 @@ const ProfileCustomization = () => {
             <div className="relative w-full h-48 bg-gray-800 rounded-md shadow-lg border-4 border-white">
               {selectedCoverPhoto ? (
                 <img
-                  src={URL.createObjectURL(selectedCoverPhoto)}
+                  src={coverPhotoPreview}
                   alt="Cover Photo"
                   className="w-full h-full object-cover rounded-md"
                 />
@@ -153,7 +166,7 @@ const ProfileCustomization = () => {
             <div className="relative w-32 h-32 -mt-16 ml-4 bg-gray-800 rounded-full shadow-lg border-4 border-white">
               {selectedAvatar ? (
                 <img
-                  src={URL.createObjectURL(selectedAvatar)}
+                  src={avatarPreview}
                   alt="Avatar"
                   className="w-full h-full object-cover rounded-full"
                 />
