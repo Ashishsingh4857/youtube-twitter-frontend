@@ -13,13 +13,16 @@ import {
 import useDiscardChanges from "../../../hooks/useDiscardChanges.js";
 import useFileSizeCheck from "../../../hooks/useFileSizeCheck.js";
 import useFileTypeCheck from "../../../hooks/useFileTypeCheck.js";
+import { useNavigate } from "react-router-dom";
+import ProfileCustomizationSkeleton from "../../../skeleton/ProfileCustomizationSkeleton.jsx";
 
 const ProfileCustomization = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   // toggle sidebar
   const { isActive } = useSelector((state) => state.global.sidebar);
   // logged in user
-  const { userData } = useSelector((state) => state.auth);
+  const { loading, userData } = useSelector((state) => state.auth);
   const { avatar, coverPhoto, email, fullName, username } = userData || {};
 
   const methods = useForm({
@@ -57,8 +60,8 @@ const ProfileCustomization = () => {
     setSelectedCoverPhoto,
   });
   // checkering the uploading file size
-  const avatarMaxSize = 1; // 4 MB
-  const coverPhotoMaxSize = 1; // 6 MB
+  const avatarMaxSize = 4; // 4 MB
+  const coverPhotoMaxSize = 6; // 6 MB
 
   const {
     isSizeExceeded: isAvatarSizeExceeded,
@@ -81,7 +84,6 @@ const ProfileCustomization = () => {
     isFileTypeValid: isCoverPhotoTypeValid,
     errorMessage: coverPhotoTypeErrorMessage,
   } = useFileTypeCheck(acceptedCoverPhotoTypes, selectedCoverPhoto);
-  console.log(isAvatarTypeValid);
 
   // submit the from
   const onSubmit = async (data) => {
@@ -116,6 +118,8 @@ const ProfileCustomization = () => {
         if (selectedUsername) userData.username = data.username;
         await dispatch(updateUserDetails(userData));
       }
+      // Save changes...
+      navigate(`/channel/${username}`);
     } catch (error) {
       setError(error.message);
     }
@@ -147,7 +151,14 @@ const ProfileCustomization = () => {
     setSelectedUsername(selectedOptions.includes("username"));
     setError(null);
   };
-
+  // handle the loading
+  if (loading) {
+    return (
+      <div className="loading-container">
+        <ProfileCustomizationSkeleton />
+      </div>
+    );
+  }
   return (
     <FormProvider {...methods}>
       <div
@@ -345,18 +356,20 @@ const ProfileCustomization = () => {
               isAvatarSizeExceeded ||
               isCoverPhotoSizeExceeded ||
               !isAvatarTypeValid ||
-              !isCoverPhotoTypeValid
+              !isCoverPhotoTypeValid ||
+              loading
                 ? "opacity-50 cursor-not-allowed"
                 : ""
             }`}
             disabled={
+              loading ||
               isAvatarSizeExceeded ||
               isCoverPhotoSizeExceeded ||
               !isAvatarTypeValid ||
               !isCoverPhotoTypeValid
             }
           >
-            Save Changes
+            {loading ? "Saving..." : "Save Changes"}
           </Button>
           <Button
             type="button"
