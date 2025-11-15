@@ -2,14 +2,12 @@
 import { useState, useEffect } from "react";
 
 const useFileTypeCheck = (acceptedTypes, file) => {
-  const [isFileTypeValid, setIsFileTypeValid] = useState(false);
+  const [isFileTypeValid, setIsFileTypeValid] = useState(true); // Set initial state to true
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     if (file) {
       const fileType = file.type;
-      console.log(fileType);
-
       const isValid = acceptedTypes.includes(fileType);
       if (isValid) {
         setIsFileTypeValid(true);
@@ -21,7 +19,7 @@ const useFileTypeCheck = (acceptedTypes, file) => {
         );
       }
     } else {
-      setIsFileTypeValid(false);
+      setIsFileTypeValid(true); // Reset to true when no file is selected
       setErrorMessage("");
     }
   }, [file, acceptedTypes]);
