@@ -20,6 +20,7 @@ import StudioNavbar from "./studio/StudioNavbar.jsx";
 import StudioSidebar from "./studio/StudioSidebar.jsx";
 import StudioLayout from "./studio/StudioLayout.jsx";
 import EditProfile from "./studio/manage-profile/EditProfile.jsx";
+import VideoTable from "./studio/manage-content/VideoTable.jsx";
 
 export {
   Logo,
@@ -43,4 +44,5 @@ export {
   StudioSidebar,
   StudioLayout,
   EditProfile,
+  VideoTable,
 };

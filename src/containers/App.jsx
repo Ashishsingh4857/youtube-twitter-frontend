@@ -8,6 +8,7 @@ import {
   PublicRoute,
   StudioLayout,
   EditProfile,
+  VideoTable,
 } from "../components/index.js";
 import {
   HomePage,
@@ -61,7 +62,9 @@ function App() {
             <Route path="profile" element={<EditProfile />} />
             <Route path="home-tab" element={<EditProfile />} />
           </Route>
-          <Route path="content" element={<ContentManagement />} />
+          <Route path="content" element={<ContentManagement />}>
+            <Route path="videos" element={<VideoTable />} />
+          </Route>
         </Route>
         {/* auth */}
         <Route
