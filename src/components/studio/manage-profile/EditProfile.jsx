@@ -58,6 +58,14 @@ const EditProfile = () => {
     setSelectedAvatar,
     selectedCoverPhoto,
     setSelectedCoverPhoto,
+    selectedFields,
+    setSelectedFields,
+    selectedEmail,
+    setSelectedEmail,
+    selectedFullName,
+    setSelectedFullName,
+    selectedUsername,
+    setSelectedUsername,
   });
   // checkering the uploading file size
   const avatarMaxSize = 4; // 4 MB
