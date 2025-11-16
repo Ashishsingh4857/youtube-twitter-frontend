@@ -43,7 +43,10 @@ const Navbar = () => {
   // avatar dropdown icons and options
   const profileOptions = [
     { text: "Sign out", onClick: handleLogout },
-    { text: "Creator Studio", onClick: () => navigate("/studio") },
+    {
+      text: "Creator Studio",
+      onClick: () => navigate(`/studio/${userData.username}`),
+    },
     { text: "Google Account" },
     { text: "Switch account" },
     { text: "Appearance: Dark" },

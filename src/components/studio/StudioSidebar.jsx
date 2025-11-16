@@ -15,7 +15,7 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import { Link, NavLink } from "react-router-dom";
 
-const StudioSidebar = () => {
+const StudioSidebar = ({ className }) => {
   //toggle sidebar
   const { isActive } = useSelector((state) => state.global.sidebar);
   //fetching logged in user data from store
@@ -90,7 +90,7 @@ const StudioSidebar = () => {
 
   return (
     <aside
-      className={`bg-gray-900 text-white h-full p-4 flex flex-col justify-between fixed  z-10 ${isActive ? "w-64" : "w-18"}`}
+      className={` text-white l p-4 flex flex-col justify-between  border-r border-gray-500  ${className}`}
     >
       <div>
         <div className="mb-4">

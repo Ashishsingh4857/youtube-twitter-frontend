@@ -18,8 +18,14 @@ const UserChannelProfile = () => {
   useEffect(() => {
     dispatch(userChannelProfile(username));
   }, [dispatch, username]);
-  const { avatar, coverImage, fullName, isSubscribed, subscribersCount } =
-    channel || {};
+  const {
+    avatar,
+    coverImage,
+    fullName,
+    isSubscribed,
+    subscribersCount,
+    totalVideos,
+  } = channel || {};
 
   //show the subscribe button only if logged in  user is not equal to userprofile user
   const compareUser = () => {
@@ -50,7 +56,7 @@ const UserChannelProfile = () => {
       label: "customize channel",
       className:
         "bg-gray-700 rounded-full px-2 py-2 text-xs md:text-sm lg:text-base md:px-4 md:py-2",
-      onClick: () => navigate(`/studio/${username}/customization`),
+      onClick: () => navigate(`/studio/${username}/customization/profile`),
       show: isOwnProfile,
     },
     {
@@ -64,7 +70,7 @@ const UserChannelProfile = () => {
 
   return (
     <div
-      className={`p-2 md:p-4 lg:p-6 h-full w-full bg-gray-900 mt-14 overflow-y-auto ${
+      className={`p-2 md:p-4 lg:p-6 h-full min-h-screen  bg-gray-900 mt-14 overflow-y-auto ${
         isOpen ? "ml-60 md:ml-25" : "ml-0 md:ml-25"
       }`}
     >
@@ -91,7 +97,9 @@ const UserChannelProfile = () => {
               <p className="text-sm text-gray-500 md:ml-2">
                 {subscribersCount} subscribers
               </p>
-              <p className="text-sm text-gray-500 md:ml-2">video</p>
+              <p className="text-sm text-gray-500 md:ml-2">
+                videos {totalVideos?.length > 0 ? totalVideos : 0}
+              </p>
             </div>
           </div>
           {/* show the subscribe button only if logged in  user is not equal to userprofile user */}

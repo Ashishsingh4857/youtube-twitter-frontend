@@ -19,6 +19,7 @@ import DropdownMenu from "./elements/DropdownMenu.jsx";
 import StudioNavbar from "./studio/StudioNavbar.jsx";
 import StudioSidebar from "./studio/StudioSidebar.jsx";
 import StudioLayout from "./studio/StudioLayout.jsx";
+import EditProfile from "./studio/manage-profile/EditProfile.jsx";
 
 export {
   Logo,
@@ -41,4 +42,5 @@ export {
   StudioNavbar,
   StudioSidebar,
   StudioLayout,
+  EditProfile,
 };

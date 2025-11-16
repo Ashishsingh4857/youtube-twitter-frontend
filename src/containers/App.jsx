@@ -7,12 +7,14 @@ import {
   ProtectedRoute,
   PublicRoute,
   StudioLayout,
+  EditProfile,
 } from "../components/index.js";
 import {
   HomePage,
   VideoDetail,
   Channel,
   ProfileCustomization,
+  ContentManagement,
 } from "../pages/index.js";
 import { useDispatch } from "react-redux";
 import { getCurrentUser } from "../store/slices/authSlice.js";
@@ -37,7 +39,7 @@ function App() {
             }
           />
           <Route
-            path="/channel/:username"
+            path="channel/:username"
             element={
               <ProtectedRoute>
                 <Channel />
@@ -54,11 +56,12 @@ function App() {
           }
         />
         {/* studio */}
-        <Route path="/studio" element={<StudioLayout />}>
-          <Route
-            path="/studio/:username/customization"
-            element={<ProfileCustomization />}
-          />
+        <Route path="/studio/:username" element={<StudioLayout />}>
+          <Route path="customization" element={<ProfileCustomization />}>
+            <Route path="profile" element={<EditProfile />} />
+            <Route path="home-tab" element={<EditProfile />} />
+          </Route>
+          <Route path="content" element={<ContentManagement />} />
         </Route>
         {/* auth */}
         <Route
