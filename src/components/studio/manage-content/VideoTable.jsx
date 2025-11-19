@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { togglePublishStatus } from "../../../store/slices/videoSlice.js";
-import { userChannelProfile } from "../../../store/slices/userSlice.js";
+import {
+  togglePublishStatus,
+  getVideosByUser,
+} from "../../../store/slices/videoSlice.js";
 import { FiChevronDown, FiChevronUp, FiMoreVertical } from "react-icons/fi";
 import { AiOutlineInfoCircle } from "react-icons/ai";
 import ClickAwayListener from "react-click-away-listener";
@@ -11,13 +13,11 @@ const VideoTable = () => {
   const { username } = useParams();
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(userChannelProfile(username));
+    dispatch(getVideosByUser(username));
   }, [dispatch, username]);
 
   // userprofile data from store
-  const channel = useSelector((state) => state.user?.profileData);
-  console.log(channel);
-  const { videos } = channel || {};
+  const videos = useSelector((state) => state.video?.userVideos?.docs);
   const [VideoVisibilityDropdown, setVideoVisibilityDropdown] = useState(null);
   const [videoInfoDropdown, setVideoInfoDropdown] = useState(null);
   const [actionsDropdown, setActionsDropdown] = useState(null);
@@ -74,8 +74,8 @@ const VideoTable = () => {
                 updatedAt,
                 duration,
                 isPublished,
-                likes,
-                comments,
+                likesCount,
+                commentsCount,
                 _id,
               } = video || {};
 
@@ -205,22 +205,21 @@ const VideoTable = () => {
                         >
                           <div className="absolute bg-gray-800 border border-gray-700 rounded-md p-2 w-32 z-10">
                             <ul>
-                              <li
-                                className="px-2 py-1 hover:bg-gray-700 cursor-pointer"
-                                onClick={() =>
-                                  handleVisibilityChange(_id, true)
-                                }
-                              >
-                                Public
-                              </li>
-                              <li
-                                className="px-2 py-1 hover:bg-gray-700 cursor-pointer"
-                                onClick={() =>
-                                  handleVisibilityChange(_id, false)
-                                }
-                              >
-                                Private
-                              </li>
+                              {!isPublished ? (
+                                <li
+                                  className="px-2 py-1 hover:bg-gray-700 cursor-pointer"
+                                  onClick={() => handleVisibilityChange(_id)}
+                                >
+                                  Public
+                                </li>
+                              ) : (
+                                <li
+                                  className="px-2 py-1 hover:bg-gray-700 cursor-pointer"
+                                  onClick={() => handleVisibilityChange(_id)}
+                                >
+                                  Private
+                                </li>
+                              )}
                             </ul>
                           </div>
                         </ClickAwayListener>
@@ -237,8 +236,8 @@ const VideoTable = () => {
                       </span>
                     </td>
                     <td className="px-4 py-2 text-sm">{views}</td>
-                    <td className="px-4 py-2 text-sm">{comments?.length}</td>
-                    <td className="px-4 py-2 text-sm">{likes?.length}</td>
+                    <td className="px-4 py-2 text-sm">{commentsCount}</td>
+                    <td className="px-4 py-2 text-sm">{likesCount}</td>
                   </tr>
                 </tbody>
               );
