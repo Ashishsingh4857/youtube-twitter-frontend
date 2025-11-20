@@ -21,7 +21,8 @@ import StudioSidebar from "./studio/StudioSidebar.jsx";
 import StudioLayout from "./studio/StudioLayout.jsx";
 import EditProfile from "./studio/manage-profile/EditProfile.jsx";
 import VideoTable from "./studio/manage-content/VideoTable.jsx";
-
+import DashboardDropdown from "./elements/DashboardDropdown.jsx";
+import EditVideo from "./studio/manage-content/EditVideo.jsx";
 export {
   Logo,
   Input,
@@ -45,4 +46,6 @@ export {
   StudioLayout,
   EditProfile,
   VideoTable,
+  DashboardDropdown,
+  EditVideo,
 };

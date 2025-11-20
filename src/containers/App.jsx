@@ -9,6 +9,7 @@ import {
   StudioLayout,
   EditProfile,
   VideoTable,
+  EditVideo,
 } from "../components/index.js";
 import {
   HomePage,
@@ -64,8 +65,10 @@ function App() {
           </Route>
           <Route path="content" element={<ContentManagement />}>
             <Route path="videos" element={<VideoTable />} />
+            <Route path="videos/edit/:videoId" element={<EditVideo />} />
           </Route>
         </Route>
+
         {/* auth */}
         <Route
           path="/login"

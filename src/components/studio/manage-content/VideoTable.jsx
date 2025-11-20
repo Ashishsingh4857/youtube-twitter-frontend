@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
   togglePublishStatus,
@@ -8,16 +8,22 @@ import {
 import { FiChevronDown, FiChevronUp, FiMoreVertical } from "react-icons/fi";
 import { AiOutlineInfoCircle } from "react-icons/ai";
 import ClickAwayListener from "react-click-away-listener";
+import { CiEdit } from "react-icons/ci";
+import { RiDeleteBin6Line } from "react-icons/ri";
+import { DashboardDropdown } from "../../index.js";
 
 const VideoTable = () => {
   const { username } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   useEffect(() => {
     dispatch(getVideosByUser(username));
   }, [dispatch, username]);
 
   // userprofile data from store
   const videos = useSelector((state) => state.video?.userVideos?.docs);
+  console.log(videos);
+
   const [VideoVisibilityDropdown, setVideoVisibilityDropdown] = useState(null);
   const [videoInfoDropdown, setVideoInfoDropdown] = useState(null);
   const [actionsDropdown, setActionsDropdown] = useState(null);
@@ -26,11 +32,6 @@ const VideoTable = () => {
   const handleVisibilityChange = async (videoId) => {
     await dispatch(togglePublishStatus(videoId));
     setVideoVisibilityDropdown(null);
-  };
-
-  const handleEditVideo = (videoId) => {
-    console.log(`Edit video ${videoId}`);
-    setActionsDropdown(null);
   };
 
   const handleDeleteVideo = (videoId) => {
@@ -133,23 +134,47 @@ const VideoTable = () => {
                           )}
                         </span>
                         {videoInfoDropdown === _id && (
-                          <ClickAwayListener
-                            onClickAway={() => handleClickAway("info", _id)}
-                          >
-                            <div className="absolute bg-gray-800 border border-gray-700 rounded-md p-2 w-64 z-10 text-sm">
-                              <span className="font-bold ">{title}</span>
-                              <br />
-                              <span>{description}</span>
-                              <FiChevronUp
-                                className="ml-1 cursor-pointer"
-                                onClick={() =>
-                                  setVideoInfoDropdown(
-                                    videoInfoDropdown === _id ? null : _id
-                                  )
-                                }
-                              />
-                            </div>
-                          </ClickAwayListener>
+                          <td className="px-4 py-2 text-sm relative">
+                            <span
+                              className="overflow-hidden"
+                              onClick={() =>
+                                setVideoInfoDropdown(
+                                  videoInfoDropdown === _id ? null : _id
+                                )
+                              }
+                            >
+                              {title.length > 30 ? (
+                                <span>
+                                  {title.substring(0, 30)}...
+                                  <AiOutlineInfoCircle
+                                    size={20}
+                                    className="ml-1 cursor-pointer"
+                                  />
+                                </span>
+                              ) : (
+                                title
+                              )}
+                            </span>
+                            {videoInfoDropdown === _id && (
+                              <DashboardDropdown
+                                isOpen={true}
+                                onClose={() => handleClickAway("info", _id)}
+                                className="w-64"
+                              >
+                                <span className="font-bold">{title}</span>
+                                <br />
+                                <span>{description}</span>
+                                <FiChevronUp
+                                  className="ml-1 cursor-pointer"
+                                  onClick={() =>
+                                    setVideoInfoDropdown(
+                                      videoInfoDropdown === _id ? null : _id
+                                    )
+                                  }
+                                />
+                              </DashboardDropdown>
+                            )}
+                          </td>
                         )}
                       </div>
                     </td>
@@ -165,26 +190,29 @@ const VideoTable = () => {
                         <FiMoreVertical size={30} />
                       </button>
                       {actionsDropdown === _id && (
-                        <ClickAwayListener
-                          onClickAway={() => handleClickAway("actions", _id)}
+                        <DashboardDropdown
+                          isOpen={true}
+                          onClose={() => handleClickAway("actions", _id)}
+                          className="w-42"
                         >
-                          <div className="absolute right-0 bg-gray-800 border border-gray-700 rounded-md p-2 w-32 z-10">
-                            <ul>
-                              <li
-                                className="px-2 py-1 hover:bg-gray-700 cursor-pointer"
-                                onClick={() => handleEditVideo(_id)}
-                              >
+                          <ul>
+                            <Link
+                              to={`/studio/${username}/content/videos/edit/${_id}`}
+                            >
+                              <li className="px-2 py-2 hover:bg-[#A855F7] cursor-pointer flex">
+                                <CiEdit size={20} className="mr-1" />
                                 Edit Video
                               </li>
-                              <li
-                                className="px-2 py-1 hover:bg-gray-700 cursor-pointer"
-                                onClick={() => handleDeleteVideo(_id)}
-                              >
-                                Delete Video
-                              </li>
-                            </ul>
-                          </div>
-                        </ClickAwayListener>
+                            </Link>
+                            <li
+                              className="px-2 py-2 hover:bg-red-700 cursor-pointer flex "
+                              onClick={() => handleDeleteVideo(_id)}
+                            >
+                              <RiDeleteBin6Line size={20} className="mr-1" />
+                              Delete Video
+                            </li>
+                          </ul>
+                        </DashboardDropdown>
                       )}
                     </td>
                     <td className="px-4 py-2 text-sm relative">
@@ -200,29 +228,29 @@ const VideoTable = () => {
                         <FiChevronDown className="ml-2" />
                       </div>
                       {VideoVisibilityDropdown === _id && (
-                        <ClickAwayListener
-                          onClickAway={() => handleClickAway("visibility", _id)}
+                        <DashboardDropdown
+                          isOpen={true}
+                          onClose={() => handleClickAway("visibility", _id)}
+                          className="w-32"
                         >
-                          <div className="absolute bg-gray-800 border border-gray-700 rounded-md p-2 w-32 z-10">
-                            <ul>
-                              {!isPublished ? (
-                                <li
-                                  className="px-2 py-1 hover:bg-gray-700 cursor-pointer"
-                                  onClick={() => handleVisibilityChange(_id)}
-                                >
-                                  Public
-                                </li>
-                              ) : (
-                                <li
-                                  className="px-2 py-1 hover:bg-gray-700 cursor-pointer"
-                                  onClick={() => handleVisibilityChange(_id)}
-                                >
-                                  Private
-                                </li>
-                              )}
-                            </ul>
-                          </div>
-                        </ClickAwayListener>
+                          <ul>
+                            {!isPublished ? (
+                              <li
+                                className="px-2 py-2 hover:bg-[#A855F7] cursor-pointer"
+                                onClick={() => handleVisibilityChange(_id)}
+                              >
+                                Public
+                              </li>
+                            ) : (
+                              <li
+                                className="px-2 py-2 hover:bg-[#A855F7] cursor-pointer"
+                                onClick={() => handleVisibilityChange(_id)}
+                              >
+                                Private
+                              </li>
+                            )}
+                          </ul>
+                        </DashboardDropdown>
                       )}
                     </td>
                     <td className="px-4 py-2 text-sm">-</td>
