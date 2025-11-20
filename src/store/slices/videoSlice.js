@@ -79,8 +79,6 @@ export const deleteAVideo = createAsyncThunk(
     try {
       const response = await axiosInstance.delete(`/videos/${videoId}`);
       toast.success(response?.data?.message);
-      console.log(response.data.data);
-
       return response.data?.data;
     } catch (error) {
       toast.error(error?.response?.data?.error);
@@ -143,9 +141,7 @@ export const getVideosByUser = createAsyncThunk(
 );
 
 const initialState = {
-  loading: false,
-  uploading: false,
-  uploaded: false,
+  status: { loading: false, uploading: false, uploaded: false, error: null },
   // all user videos
   videos: {
     docs: [],
@@ -164,8 +160,8 @@ const videoSlice = createSlice({
   initialState,
   reducers: {
     updateUploadState: (state) => {
-      state.uploading = false;
-      state.uploaded = false;
+      state.status.uploading = false;
+      state.status.uploaded = false;
     },
     makeVideosNull: (state) => {
       state.videos.docs = [];
@@ -175,71 +171,113 @@ const videoSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(getAllVideos.pending, (state) => {
-      state.loading = true;
-    });
-    builder.addCase(getAllVideos.fulfilled, (state, action) => {
-      state.loading = false;
-      state.videos.docs = [...state.videos.docs, ...action.payload.videos];
-      state.videos.hasNextPage = action.payload.hasNextPage;
-    });
+    builder
+      // getAllVideos
+      .addCase(getAllVideos.pending, (state) => {
+        state.status.loading = true;
+        state.status.error = null;
+      })
+      .addCase(getAllVideos.fulfilled, (state, action) => {
+        state.status.loading = false;
+        state.videos.docs = [...state.videos.docs, ...action.payload.videos];
+        state.videos.hasNextPage = action.payload.hasNextPage;
+      })
+      .addCase(getAllVideos.rejected, (state, action) => {
+        state.status.loading = false;
+        state.status.error = action.error.message;
+      })
 
-    builder.addCase(publishAvideo.pending, (state) => {
-      state.uploading = true;
-    });
-    builder.addCase(publishAvideo.fulfilled, (state) => {
-      state.uploading = false;
-      state.uploaded = true;
-    });
+      // publishAvideo
+      .addCase(publishAvideo.pending, (state) => {
+        state.status.uploading = true;
+        state.status.error = null;
+      })
+      .addCase(publishAvideo.fulfilled, (state) => {
+        state.status.uploading = false;
+        state.status.uploaded = true;
+      })
+      .addCase(publishAvideo.rejected, (state, action) => {
+        state.status.uploading = false;
+        state.status.error = action.error.message;
+      })
 
-    builder.addCase(updateAVideo.pending, (state) => {
-      state.uploading = true;
-    });
-    builder.addCase(updateAVideo.fulfilled, (state, action) => {
-      state.uploading = false;
-      state.uploaded = true;
-      const updatedVideo = action.payload;
-      updateVideoState(state, updatedVideo._id, updatedVideo);
-    });
+      // updateAVideo
+      .addCase(updateAVideo.pending, (state) => {
+        state.status.uploading = true;
+        state.status.error = null;
+      })
+      .addCase(updateAVideo.fulfilled, (state, action) => {
+        state.status.uploading = false;
+        state.status.uploaded = true;
+        const updatedVideo = action.payload;
+        updateVideoState(state, updatedVideo._id, updatedVideo);
+      })
+      .addCase(updateAVideo.rejected, (state, action) => {
+        state.status.uploading = false;
+        state.status.error = action.error.message;
+      })
 
-    builder.addCase(deleteAVideo.pending, (state) => {
-      state.loading = true;
-    });
-    builder.addCase(deleteAVideo.fulfilled, (state, action) => {
-      console.log(action);
+      // deleteAVideo
+      .addCase(deleteAVideo.pending, (state) => {
+        state.status.loading = true;
+        state.status.error = null;
+      })
+      .addCase(deleteAVideo.fulfilled, (state, action) => {
+        state.status.loading = false;
+        const deletedVideoId = action.payload._id;
+        state.videos.docs = state.videos.docs.filter(
+          (video) => video._id !== deletedVideoId
+        );
+        state.userVideos.docs = state.userVideos.docs.filter(
+          (video) => video._id !== deletedVideoId
+        );
+      })
+      .addCase(deleteAVideo.rejected, (state, action) => {
+        state.status.loading = false;
+        state.status.error = action.error.message;
+      })
 
-      const deletedVideoId = action.payload._id;
-      state.videos.docs = state.videos.docs.filter(
-        (video) => video._id !== deletedVideoId
-      );
-      state.userVideos.docs = state.userVideos.docs.filter(
-        (video) => video._id !== deletedVideoId
-      );
-    });
+      // getVideoById
+      .addCase(getVideoById.pending, (state) => {
+        state.status.loading = true;
+        state.status.error = null;
+      })
+      .addCase(getVideoById.fulfilled, (state, action) => {
+        state.status.loading = false;
+        state.video = action.payload;
+      })
+      .addCase(getVideoById.rejected, (state, action) => {
+        state.status.loading = false;
+        state.status.error = action.error.message;
+      })
 
-    builder.addCase(getVideoById.pending, (state) => {
-      state.loading = true;
-    });
-    builder.addCase(getVideoById.fulfilled, (state, action) => {
-      state.loading = false;
-      state.video = action.payload;
-    });
+      // togglePublishStatus
+      .addCase(togglePublishStatus.pending, (state) => {
+        state.status.loading = true;
+        state.status.error = null;
+      })
+      .addCase(togglePublishStatus.fulfilled, (state, action) => {
+        state.status.loading = false;
+        updateVideoState(state, action.payload._id, action.payload);
+      })
+      .addCase(togglePublishStatus.rejected, (state, action) => {
+        state.status.loading = false;
+        state.status.error = action.error.message;
+      })
 
-    builder.addCase(togglePublishStatus.pending, (state) => {
-      state.loading = true;
-    });
-    builder.addCase(togglePublishStatus.fulfilled, (state, action) => {
-      state.loading = false;
-      updateVideoState(state, action.payload._id, action.payload);
-    });
-
-    builder.addCase(getVideosByUser.pending, (state) => {
-      state.loading = true;
-    });
-    builder.addCase(getVideosByUser.fulfilled, (state, action) => {
-      state.loading = false;
-      state.userVideos.docs = action.payload;
-    });
+      // getVideosByUser
+      .addCase(getVideosByUser.pending, (state) => {
+        state.status.loading = true;
+        state.status.error = null;
+      })
+      .addCase(getVideosByUser.fulfilled, (state, action) => {
+        state.status.loading = false;
+        state.userVideos.docs = action.payload;
+      })
+      .addCase(getVideosByUser.rejected, (state, action) => {
+        state.status.loading = false;
+        state.status.error = action.error.message;
+      });
   },
 });
 
