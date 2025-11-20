@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   togglePublishStatus,
   getVideosByUser,
+  deleteAVideo,
 } from "../../../store/slices/videoSlice.js";
 import { FiChevronDown, FiChevronUp, FiMoreVertical } from "react-icons/fi";
 import { AiOutlineInfoCircle } from "react-icons/ai";
@@ -37,14 +38,8 @@ const VideoTable = () => {
     setVideoVisibilityDropdown(null);
   };
 
-  const handleDeleteVideo = (videoId) => {
-    setVideoToDelete(videoId);
-    setIsDeletePopupOpen(true);
-  };
-
-  const handleConfirmDelete = () => {
-    // dispatch(deleteAVideo(videoToDelete));
-    console.log("video deleted");
+  const handleConfirmDelete = async () => {
+    await dispatch(deleteAVideo(videoToDelete));
     setIsDeletePopupOpen(false);
   };
 
@@ -224,8 +219,9 @@ const VideoTable = () => {
                             <li
                               className="px-2 py-2 hover:bg-red-700 cursor-pointer flex "
                               onClick={() => {
-                                handleDeleteVideo(_id);
                                 setActionsDropdown(null);
+                                setVideoToDelete(_id);
+                                setIsDeletePopupOpen(true);
                               }}
                             >
                               <RiDeleteBin6Line size={20} className="mr-1" />

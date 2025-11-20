@@ -79,6 +79,8 @@ export const deleteAVideo = createAsyncThunk(
     try {
       const response = await axiosInstance.delete(`/videos/${videoId}`);
       toast.success(response?.data?.message);
+      console.log(response.data.data);
+
       return response.data?.data;
     } catch (error) {
       toast.error(error?.response?.data?.error);
@@ -144,10 +146,12 @@ const initialState = {
   loading: false,
   uploading: false,
   uploaded: false,
+  // all user videos
   videos: {
     docs: [],
     hasNextPage: false,
   },
+  //logged in user videos
   userVideos: {
     docs: [],
     hasNextPage: false,
@@ -201,8 +205,16 @@ const videoSlice = createSlice({
     builder.addCase(deleteAVideo.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(deleteAVideo.fulfilled, (state) => {
-      state.loading = false;
+    builder.addCase(deleteAVideo.fulfilled, (state, action) => {
+      console.log(action);
+
+      const deletedVideoId = action.payload._id;
+      state.videos.docs = state.videos.docs.filter(
+        (video) => video._id !== deletedVideoId
+      );
+      state.userVideos.docs = state.userVideos.docs.filter(
+        (video) => video._id !== deletedVideoId
+      );
     });
 
     builder.addCase(getVideoById.pending, (state) => {
