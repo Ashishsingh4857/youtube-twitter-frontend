@@ -23,6 +23,7 @@ import EditProfile from "./studio/manage-profile/EditProfile.jsx";
 import VideoTable from "./studio/manage-content/VideoTable.jsx";
 import DashboardDropdown from "./elements/DashboardDropdown.jsx";
 import EditVideo from "./studio/manage-content/EditVideo.jsx";
+import ConfirmationPopup from "./elements/ConfirmationPopup.jsx";
 export {
   Logo,
   Input,
@@ -48,4 +49,5 @@ export {
   VideoTable,
   DashboardDropdown,
   EditVideo,
+  ConfirmationPopup,
 };

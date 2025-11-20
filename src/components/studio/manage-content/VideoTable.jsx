@@ -10,7 +10,7 @@ import { AiOutlineInfoCircle } from "react-icons/ai";
 import ClickAwayListener from "react-click-away-listener";
 import { CiEdit } from "react-icons/ci";
 import { RiDeleteBin6Line } from "react-icons/ri";
-import { DashboardDropdown } from "../../index.js";
+import { DashboardDropdown, ConfirmationPopup } from "../../index.js";
 
 const VideoTable = () => {
   const { username } = useParams();
@@ -20,13 +20,16 @@ const VideoTable = () => {
     dispatch(getVideosByUser(username));
   }, [dispatch, username]);
 
-  // userprofile data from store
+  // userVideos data from store
   const videos = useSelector((state) => state.video?.userVideos?.docs);
   console.log(videos);
 
   const [VideoVisibilityDropdown, setVideoVisibilityDropdown] = useState(null);
   const [videoInfoDropdown, setVideoInfoDropdown] = useState(null);
   const [actionsDropdown, setActionsDropdown] = useState(null);
+  //delete video conformation  popup
+  const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false);
+  const [videoToDelete, setVideoToDelete] = useState(null);
 
   // handle video visibility change
   const handleVisibilityChange = async (videoId) => {
@@ -35,8 +38,14 @@ const VideoTable = () => {
   };
 
   const handleDeleteVideo = (videoId) => {
-    console.log(`delete video ${videoId}`);
-    setActionsDropdown(null);
+    setVideoToDelete(videoId);
+    setIsDeletePopupOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
+    // dispatch(deleteAVideo(videoToDelete));
+    console.log("video deleted");
+    setIsDeletePopupOpen(false);
   };
 
   const handleClickAway = (dropdownType, videoId) => {
@@ -51,6 +60,13 @@ const VideoTable = () => {
 
   return (
     <div className="overflow-x-auto min-h-screen">
+      <ConfirmationPopup
+        isOpen={isDeletePopupOpen}
+        onClose={() => setIsDeletePopupOpen(false)}
+        onConfirm={handleConfirmDelete}
+        title="Delete Video"
+        message="Are you sure you want to delete this video?"
+      />
       <table className="w-full text-left text-white">
         <thead>
           <tr className="border-b border-gray-700 h-12">
@@ -198,6 +214,7 @@ const VideoTable = () => {
                           <ul>
                             <Link
                               to={`/studio/${username}/content/videos/edit/${_id}`}
+                              onClick={() => setActionsDropdown(null)}
                             >
                               <li className="px-2 py-2 hover:bg-[#A855F7] cursor-pointer flex">
                                 <CiEdit size={20} className="mr-1" />
@@ -206,7 +223,10 @@ const VideoTable = () => {
                             </Link>
                             <li
                               className="px-2 py-2 hover:bg-red-700 cursor-pointer flex "
-                              onClick={() => handleDeleteVideo(_id)}
+                              onClick={() => {
+                                handleDeleteVideo(_id);
+                                setActionsDropdown(null);
+                              }}
                             >
                               <RiDeleteBin6Line size={20} className="mr-1" />
                               Delete Video
