@@ -12,6 +12,7 @@ import ClickAwayListener from "react-click-away-listener";
 import { CiEdit } from "react-icons/ci";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { DashboardDropdown, ConfirmationPopup } from "../../index.js";
+import VideoTableLoadingSkeleton from "../../../skeleton/VideoTableLoadingSkeleton.jsx";
 
 const VideoTable = () => {
   const { username } = useParams();
@@ -23,14 +24,15 @@ const VideoTable = () => {
 
   // userVideos data from store
   const videos = useSelector((state) => state.video?.userVideos?.docs);
-  console.log(videos);
-
   const [VideoVisibilityDropdown, setVideoVisibilityDropdown] = useState(null);
   const [videoInfoDropdown, setVideoInfoDropdown] = useState(null);
   const [actionsDropdown, setActionsDropdown] = useState(null);
   //delete video conformation  popup
   const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false);
   const [videoToDelete, setVideoToDelete] = useState(null);
+
+  // loading status
+  const status = useSelector((state) => state.video.status);
 
   // handle video visibility change
   const handleVisibilityChange = async (videoId) => {
@@ -52,6 +54,9 @@ const VideoTable = () => {
       setVideoInfoDropdown(null);
     }
   };
+  if (status.loading) {
+    return <VideoTableLoadingSkeleton />;
+  }
 
   return (
     <div className="overflow-x-auto min-h-screen">
