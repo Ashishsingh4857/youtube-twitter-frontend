@@ -1,17 +1,21 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { MdOutlineFileUpload } from "react-icons/md";
+import { FiChevronDown } from "react-icons/fi";
 import { useParams } from "react-router-dom";
-import { VideoPlayer, Button } from "../../index.js";
+import { VideoPlayer, Button, DashboardDropdown } from "../../index.js";
 import { useSelector, useDispatch } from "react-redux";
 import {
   getVideoById,
   updateAVideo,
+  togglePublishStatus,
 } from "../../../store/slices/videoSlice.js";
 import { useForm } from "react-hook-form";
-
+import { RiGitRepositoryPrivateLine } from "react-icons/ri";
+import { MdOutlinePublic } from "react-icons/md";
 const EditVideo = () => {
   const { videoId } = useParams();
   const dispatch = useDispatch();
+  const [VideoVisibilityDropdown, setVideoVisibilityDropdown] = useState(null);
   const { video } = useSelector((state) => state.video);
   const videoData = video?.[0];
 
@@ -40,6 +44,12 @@ const EditVideo = () => {
 
   const onSubmit = async (data) => {
     await dispatch(updateAVideo({ videoId, data }));
+  };
+
+  const handleVisibilityChange = async () => {
+    await dispatch(togglePublishStatus(videoId));
+    setVideoVisibilityDropdown(null);
+    await dispatch(getVideoById({ videoId }));
   };
 
   return (
@@ -130,6 +140,53 @@ const EditVideo = () => {
               <div className="p-2 border-t-2 ">
                 <p className="text-xs">Video Link</p>
               </div>
+            </div>
+            {/*video visibility*/}
+            <div className="relative">
+              <label className="block mb-1">Visibility</label>
+              <div
+                className="flex items-center cursor-pointer w-full p-2 bg-gray-800 rounded"
+                onClick={() =>
+                  setVideoVisibilityDropdown(
+                    VideoVisibilityDropdown === videoId ? null : videoId
+                  )
+                }
+              >
+                <span className="mr-2">
+                  {videoData?.isPublished ? (
+                    <MdOutlinePublic size={20} />
+                  ) : (
+                    <RiGitRepositoryPrivateLine size={20} />
+                  )}
+                </span>
+                <span>{videoData?.isPublished ? "Public" : "Private"}</span>
+                <FiChevronDown className="ml-2" />
+              </div>
+              {VideoVisibilityDropdown === videoId && (
+                <DashboardDropdown
+                  isOpen={true}
+                  onClose={() => setVideoVisibilityDropdown(null)}
+                  className="left-0"
+                >
+                  <ul>
+                    {!videoData?.isPublished ? (
+                      <li
+                        className="px-2 py-2 hover:bg-[#A855F7] cursor-pointer"
+                        onClick={handleVisibilityChange}
+                      >
+                        Public
+                      </li>
+                    ) : (
+                      <li
+                        className="px-2 py-2 hover:bg-[#A855F7] cursor-pointer"
+                        onClick={handleVisibilityChange}
+                      >
+                        Private
+                      </li>
+                    )}
+                  </ul>
+                </DashboardDropdown>
+              )}
             </div>
           </div>
         </div>
