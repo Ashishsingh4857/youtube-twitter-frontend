@@ -12,10 +12,12 @@ import {
 import { useForm } from "react-hook-form";
 import { RiGitRepositoryPrivateLine } from "react-icons/ri";
 import { MdOutlinePublic } from "react-icons/md";
+
 const EditVideo = () => {
   const { videoId } = useParams();
   const dispatch = useDispatch();
   const [VideoVisibilityDropdown, setVideoVisibilityDropdown] = useState(null);
+  const [thumbnailPreview, setThumbnailPreview] = useState(null);
   const { video } = useSelector((state) => state.video);
   const videoData = video?.[0];
 
@@ -24,6 +26,7 @@ const EditVideo = () => {
     handleSubmit,
     setValue,
     reset,
+    control,
     formState: { errors },
   } = useForm();
 
@@ -39,9 +42,10 @@ const EditVideo = () => {
         title: videoData.title,
         description: videoData.description,
       });
+      setThumbnailPreview(videoData.thumbnail.url);
     }
   }, [videoData, reset]);
-
+  //form submit
   const onSubmit = async (data) => {
     await dispatch(updateAVideo({ videoId, data }));
   };
@@ -50,6 +54,11 @@ const EditVideo = () => {
     await dispatch(togglePublishStatus(videoId));
     setVideoVisibilityDropdown(null);
     await dispatch(getVideoById({ videoId }));
+  };
+
+  const handleThumbnailChange = (e) => {
+    const file = e.target.files[0];
+    setThumbnailPreview(URL.createObjectURL(file));
   };
 
   return (
@@ -112,14 +121,24 @@ const EditVideo = () => {
                     type="file"
                     id="thumbnail"
                     {...register("thumbnail")}
+                    onChange={handleThumbnailChange}
                     className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                   />
                   <label htmlFor="thumbnail">
-                    <div className="bg-gray-800 p-4 rounded cursor-pointer hover:bg-gray-700 flex flex-col items-center border">
-                      <span>
+                    <div className="bg-gray-800 p-4 rounded cursor-pointer hover:bg-gray-700 flex flex-col items-center border relative">
+                      {thumbnailPreview && (
+                        <img
+                          src={thumbnailPreview}
+                          alt="Thumbnail Preview"
+                          className="w-20 h-20 object-cover rounded"
+                        />
+                      )}
+                      <span className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
                         <MdOutlineFileUpload size={30} />
                       </span>
-                      <span>Upload file</span>
+                      <span>
+                        {thumbnailPreview ? "Change Thumbnail" : "Upload file"}
+                      </span>
                     </div>
                   </label>
                 </div>
@@ -132,8 +151,9 @@ const EditVideo = () => {
             <div className="mb-4 bg-gray-800 rounded">
               <div className="aspect-video bg-black ">
                 <video
+                  className="w-full"
                   src={videoData?.videoFile?.url}
-                  poster={videoData?.thumbnail?.url}
+                  poster={thumbnailPreview || videoData?.thumbnail?.url}
                   controls={true}
                 ></video>
               </div>
