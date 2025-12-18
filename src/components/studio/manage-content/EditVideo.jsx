@@ -12,12 +12,15 @@ import {
 import { useForm } from "react-hook-form";
 import { RiGitRepositoryPrivateLine } from "react-icons/ri";
 import { MdOutlinePublic } from "react-icons/md";
+import useFileSizeCheck from "../../../hooks/useFileSizeCheck.js";
+import useFileTypeCheck from "../../../hooks/useFileTypeCheck.js";
 
 const EditVideo = () => {
   const { videoId } = useParams();
   const dispatch = useDispatch();
   const [VideoVisibilityDropdown, setVideoVisibilityDropdown] = useState(null);
   const [thumbnailPreview, setThumbnailPreview] = useState(null);
+  const [thumbnailFile, setThumbnailFile] = useState(null);
   const { video } = useSelector((state) => state.video);
   const videoData = video?.[0];
 
@@ -56,8 +59,14 @@ const EditVideo = () => {
     await dispatch(getVideoById({ videoId }));
   };
 
+  const { isSizeExceeded, errorMessage } = useFileSizeCheck(1, thumbnailFile);
+  const { isFileTypeValid, errorMessage: typeErrorMessage } = useFileTypeCheck(
+    ["image/jpeg", "image/png", "image/gif"],
+    thumbnailFile
+  );
   const handleThumbnailChange = (e) => {
     const file = e.target.files[0];
+    setThumbnailFile(file);
     setThumbnailPreview(URL.createObjectURL(file));
   };
 
@@ -75,7 +84,8 @@ const EditVideo = () => {
           <Button
             form="EditVideoForm"
             type="submit"
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md shadow-lg text-xs md:text-sm ml-4"
+            className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md shadow-lg text-xs md:text-sm ml-4 ${!isFileTypeValid || isSizeExceeded ? "opacity-50 cursor-not-allowed" : ""}`}
+            disabled={!isFileTypeValid || isSizeExceeded}
           >
             Save
           </Button>
@@ -141,6 +151,14 @@ const EditVideo = () => {
                       </span>
                     </div>
                   </label>
+                  {isSizeExceeded && (
+                    <p className="text-red-500 text-sm mt-2">{errorMessage}</p>
+                  )}
+                  {typeErrorMessage && (
+                    <p className="text-red-500 text-sm mt-2">
+                      {typeErrorMessage}
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
