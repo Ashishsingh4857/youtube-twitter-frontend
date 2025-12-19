@@ -19,6 +19,9 @@ import {
   AiOutlineCreditCard,
 } from "react-icons/ai";
 import { FaRegMoon } from "react-icons/fa";
+import { HiOutlinePlus } from "react-icons/hi";
+import { PiVideoDuotone } from "react-icons/pi";
+import { IoCreateOutline } from "react-icons/io5";
 import ClickAwayListener from "react-click-away-listener";
 
 const Navbar = () => {
@@ -26,6 +29,8 @@ const Navbar = () => {
   const { userData } = useSelector((state) => state.auth);
   const { register, handleSubmit } = useForm();
   const [showSearch, setShowSearch] = useState(false);
+  // create button dropdown toggle
+  const [isCreateDropdownOpen, setIsCreateDropdownOpen] = useState(false);
   // toggle
   const { sidebar, navbar } = useSelector((state) => state.global);
   const navigate = useNavigate();
@@ -59,6 +64,20 @@ const Navbar = () => {
     "Creator Studio": <AiOutlineVideoCamera size={18} />,
     "Appearance: Dark": <FaRegMoon size={18} />,
     "Purchases and memberships": <AiOutlineCreditCard size={18} />,
+  };
+  // create button dropdown menu options and icons
+  const createOptions = [
+    {
+      text: "Upload Video",
+      onClick: () =>
+        navigate(navigate(`/studio/${username}/content/videos/upload-video`)),
+    },
+    { text: "Create Post", onClick: () => navigate("/create-post") },
+  ];
+
+  const createIcons = {
+    "Upload Video": <PiVideoDuotone size={18} />,
+    "Create Post": <IoCreateOutline size={18} />,
   };
 
   return (
@@ -106,6 +125,31 @@ const Navbar = () => {
           <AiOutlineSearch className="text-2xl text-gray-400 hover:text-white transition-colors" />
         </button>
       </div>
+      {/* create button dropdown */}
+      <div className="relative mr-4">
+        <Button
+          className="text-sm flex items-center p-2 rounded-full bg-gray-700 hover:bg-gray-600 cursor-pointer capitalize"
+          onClick={() => setIsCreateDropdownOpen(!isCreateDropdownOpen)}
+        >
+          <HiOutlinePlus size={20} />
+          Create
+        </Button>
+        {isCreateDropdownOpen && (
+          <ClickAwayListener onClickAway={() => setIsCreateDropdownOpen(false)}>
+            <div
+              onClick={(e) => e.stopPropagation()}
+              className="absolute right-0 mt-2 w-48 bg-gray-800 rounded-md shadow-lg z-10"
+            >
+              <DropdownMenu
+                options={createOptions}
+                icons={createIcons}
+                setIsActive={setIsCreateDropdownOpen}
+              />
+            </div>
+          </ClickAwayListener>
+        )}
+      </div>
+      {/* avatar section */}
       <div>
         {userData ? (
           <div className="relative">

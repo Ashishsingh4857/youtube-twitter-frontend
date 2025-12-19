@@ -14,6 +14,7 @@ import { useNavigate } from "react-router-dom";
 import { AiOutlineSetting, AiOutlineLogout } from "react-icons/ai";
 import { FaRegMoon } from "react-icons/fa";
 import { PiVideoDuotone } from "react-icons/pi";
+import { IoCreateOutline } from "react-icons/io5";
 import { toggleStudioSidebar } from "../../store/slices/globalSlice.js";
 
 const StudioNavbar = () => {
@@ -25,6 +26,8 @@ const StudioNavbar = () => {
   // profile dropdown menu toggle
   const [isStudioProfileDropdownOpen, setIsStudioProfileDropdownOpen] =
     useState(false);
+  // create button dropdown toggle
+  const [isCreateDropdownOpen, setIsCreateDropdownOpen] = useState(false);
 
   // toggle sidebar
   const { isActive } = useSelector((state) => state.global.sidebar);
@@ -55,6 +58,21 @@ const StudioNavbar = () => {
     "Main-Menu": <PiVideoDuotone size={18} />,
     "Appearance: Dark": <FaRegMoon size={18} />,
     "Switch account": <AiOutlineSetting size={18} />,
+  };
+
+  // create button dropdown menu options and icons
+  const createOptions = [
+    {
+      text: "Upload Video",
+      onClick: () =>
+        navigate(`/studio/${username}/content/videos/upload-video`),
+    },
+    { text: "Create Post", onClick: () => navigate("/create-post") },
+  ];
+
+  const createIcons = {
+    "Upload Video": <PiVideoDuotone size={18} />,
+    "Create Post": <IoCreateOutline size={18} />,
   };
 
   return (
@@ -119,10 +137,32 @@ const StudioNavbar = () => {
         <button>
           <IoMdNotificationsOutline size={20} />
         </button>
-        {/* upload videos*/}
-        <Button className="text-sm  flex items-center md:p-2 rounded-full  hover:bg-gray-600">
-          <HiOutlinePlus size={20} /> Create
-        </Button>
+        {/* create button dropdown */}
+        <div className="relative">
+          <Button
+            className="text-sm flex items-center md:p-2 rounded-full hover:bg-gray-600"
+            onClick={() => setIsCreateDropdownOpen(!isCreateDropdownOpen)}
+          >
+            <HiOutlinePlus size={20} />
+            Create
+          </Button>
+          {isCreateDropdownOpen && (
+            <ClickAwayListener
+              onClickAway={() => setIsCreateDropdownOpen(false)}
+            >
+              <div
+                onClick={(e) => e.stopPropagation()}
+                className="absolute right-0 mt-2 w-48 bg-gray-800 rounded-md shadow-lg z-10"
+              >
+                <DropdownMenu
+                  options={createOptions}
+                  icons={createIcons}
+                  setIsActive={setIsCreateDropdownOpen}
+                />
+              </div>
+            </ClickAwayListener>
+          )}
+        </div>
         {/* avatar and avatar dropdown */}
         {userData && (
           <div className="relative">
