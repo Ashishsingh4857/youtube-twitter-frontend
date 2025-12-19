@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { MdOutlineFileUpload } from "react-icons/md";
 import { FiChevronDown } from "react-icons/fi";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { VideoPlayer, Button, DashboardDropdown } from "../../index.js";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -15,15 +15,19 @@ import { MdOutlinePublic } from "react-icons/md";
 import useFileSizeCheck from "../../../hooks/useFileSizeCheck.js";
 import useFileTypeCheck from "../../../hooks/useFileTypeCheck.js";
 import useDiscardChanges from "../../../hooks/useDiscardChanges.js";
+import EditVideoSkeleton from "../../../skeleton/EditVideoSkeleton.jsx";
 
 const EditVideo = () => {
-  const { videoId } = useParams();
+  const { videoId, username } = useParams();
   const dispatch = useDispatch();
   const [VideoVisibilityDropdown, setVideoVisibilityDropdown] = useState(null);
   const [thumbnailPreview, setThumbnailPreview] = useState(null);
   const [thumbnailFile, setThumbnailFile] = useState(null);
   const { video } = useSelector((state) => state.video);
   const videoData = video?.[0];
+  // loading status
+  const status = useSelector((state) => state.video.status);
+  const navigate = useNavigate();
 
   const {
     register,
@@ -53,6 +57,7 @@ const EditVideo = () => {
   //form submit
   const onSubmit = async (data) => {
     await dispatch(updateAVideo({ videoId, data }));
+    navigate(`/studio/${username}/content/videos`);
   };
 
   const handleVisibilityChange = async () => {
@@ -75,6 +80,11 @@ const EditVideo = () => {
     thumbnailPreview,
     setThumbnailPreview,
   });
+
+  // handle the loading
+  if (status.loading) {
+    return <EditVideoSkeleton />;
+  }
 
   return (
     <div className="p-6 bg-gray-900 text-white min-h-screen">
