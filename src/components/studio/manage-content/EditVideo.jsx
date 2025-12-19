@@ -178,15 +178,16 @@ const EditVideo = () => {
           {/* Right Column */}
           <div>
             <div className="mb-4 bg-gray-800 rounded">
-              <div className="aspect-video bg-black ">
+              {/* Aspect‑ratio container – forces 16:9 shape */}
+              <div className="aspect-video bg-black w-full">
                 <video
-                  className="w-full"
+                  className="w-full h-full object-cover"
                   src={videoData?.videoFile?.url}
                   poster={thumbnailPreview || videoData?.thumbnail?.url}
-                  controls={true}
-                ></video>
+                  controls
+                />
               </div>
-              <div className="p-2 border-t-2 ">
+              <div className="p-2 border-t-2">
                 <p className="text-xs">Video Link</p>
               </div>
             </div>
