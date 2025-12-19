@@ -18,6 +18,8 @@ const useDiscardChanges = (getValues, reset, options = {}) => {
     setSelectedFullName,
     selectedUsername,
     setSelectedUsername,
+    thumbnailPreview,
+    setThumbnailPreview,
   } = options;
 
   const handleDiscardChanges = useCallback(
@@ -37,6 +39,10 @@ const useDiscardChanges = (getValues, reset, options = {}) => {
       if (setSelectedEmail) setSelectedEmail(false);
       if (setSelectedFullName) setSelectedFullName(false);
       if (setSelectedUsername) setSelectedUsername(false);
+      if (thumbnailPreview && setThumbnailPreview) {
+        URL.revokeObjectURL(thumbnailPreview);
+        setThumbnailPreview(null);
+      }
     },
     // dependency
     [
@@ -53,6 +59,8 @@ const useDiscardChanges = (getValues, reset, options = {}) => {
       setSelectedEmail,
       setSelectedFullName,
       setSelectedUsername,
+      thumbnailPreview,
+      setThumbnailPreview,
     ]
   );
 

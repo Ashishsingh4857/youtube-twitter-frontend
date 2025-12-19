@@ -14,6 +14,7 @@ import { RiGitRepositoryPrivateLine } from "react-icons/ri";
 import { MdOutlinePublic } from "react-icons/md";
 import useFileSizeCheck from "../../../hooks/useFileSizeCheck.js";
 import useFileTypeCheck from "../../../hooks/useFileTypeCheck.js";
+import useDiscardChanges from "../../../hooks/useDiscardChanges.js";
 
 const EditVideo = () => {
   const { videoId } = useParams();
@@ -29,6 +30,7 @@ const EditVideo = () => {
     handleSubmit,
     setValue,
     reset,
+    getValues,
     control,
     formState: { errors },
   } = useForm();
@@ -69,6 +71,10 @@ const EditVideo = () => {
     setThumbnailFile(file);
     setThumbnailPreview(URL.createObjectURL(file));
   };
+  const { handleDiscardChanges } = useDiscardChanges(getValues, reset, {
+    thumbnailPreview,
+    setThumbnailPreview,
+  });
 
   return (
     <div className="p-6 bg-gray-900 text-white min-h-screen">
@@ -77,6 +83,7 @@ const EditVideo = () => {
         <div className="mt-2 md:mt-0">
           <Button
             type="button"
+            onClick={handleDiscardChanges}
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md shadow-lg text-xs md:text-sm "
           >
             Discard Changes
@@ -135,20 +142,24 @@ const EditVideo = () => {
                     className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                   />
                   <label htmlFor="thumbnail">
-                    <div className="bg-gray-800 p-4 rounded cursor-pointer hover:bg-gray-700 flex flex-col items-center border relative">
+                    <div className="h-25 bg-gray-800 p-4 rounded cursor-pointer hover:bg-gray-700 flex flex-col items-center border ">
                       {thumbnailPreview && (
                         <img
                           src={thumbnailPreview}
                           alt="Thumbnail Preview"
-                          className="w-20 h-20 object-cover rounded"
+                          className="max-h-20 object-cover rounded relative"
                         />
                       )}
-                      <span className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                        <MdOutlineFileUpload size={30} />
-                      </span>
-                      <span>
-                        {thumbnailPreview ? "Change Thumbnail" : "Upload file"}
-                      </span>
+                      <div className="flex flex-col items-center justify-center absolute">
+                        <span>
+                          <MdOutlineFileUpload size={30} />
+                        </span>
+                        <span>
+                          {thumbnailPreview
+                            ? "Change Thumbnail"
+                            : "Upload file"}
+                        </span>
+                      </div>
                     </div>
                   </label>
                   {isSizeExceeded && (
