@@ -5,9 +5,8 @@ import { publishAvideo } from "../../../store/slices/videoSlice.js";
 import Dropzone from "react-dropzone";
 import { IoMdClose } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
-import { BsRocketFill } from "react-icons/bs";
 import RocketVideoUploadAnimation from "../../../skeleton/RocketVideoUploadAnimation.jsx";
+import UploadVideoPopupSkeleton from "../../../skeleton/UploadVideoPopupSkeleton.jsx";
 
 function UploadVideoPopup({ isOpen, onClose }) {
   const dispatch = useDispatch();
@@ -22,8 +21,7 @@ function UploadVideoPopup({ isOpen, onClose }) {
   const [preview, setPreview] = useState(null);
 
   // Access the uploading and error states from the video slice
-  // const { uploading } = useSelector((state) => state.video.status);
-  const uploading = true;
+  const { uploading, loading } = useSelector((state) => state.video.status);
   const { userData } = useSelector((state) => state.auth);
 
   // File selected
@@ -48,7 +46,9 @@ function UploadVideoPopup({ isOpen, onClose }) {
   };
 
   if (!isOpen) return null;
-
+  if (loading) {
+    return <UploadVideoPopupSkeleton />;
+  }
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 sm:p-6 md:p-8">
       <div className="relative w-full max-w-2xl bg-gray-900 rounded-xl p-4 sm:p-6 md:p-8 shadow-xl">
