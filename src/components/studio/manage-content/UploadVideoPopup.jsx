@@ -167,8 +167,8 @@ function UploadVideoPopup({ isOpen, onClose }) {
                   })}
                   className="w-full p-2 bg-gray-800 text-white rounded text-sm sm:text-base"
                 >
-                  <option value="public">Public</option>
-                  <option value="private">Private</option>
+                  <option value={true}>Public</option>
+                  <option value={false}>Private</option>
                 </select>
                 {errors.visibility && (
                   <p className="text-red-500 text-xs sm:text-sm mt-1">

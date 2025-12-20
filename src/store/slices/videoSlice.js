@@ -7,6 +7,7 @@ export const publishAvideo = createAsyncThunk("publishAvideo", async (data) => {
   const formData = new FormData();
   formData.append("title", data.title);
   formData.append("description", data.description);
+  formData.append("visibility", data.visibility);
   formData.append("videoFile", data.videoFile[0]);
   formData.append("thumbnail", data.thumbnail[0]);
 
