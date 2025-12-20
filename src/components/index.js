@@ -24,6 +24,7 @@ import VideoTable from "./studio/manage-content/VideoTable.jsx";
 import DashboardDropdown from "./elements/DashboardDropdown.jsx";
 import EditVideo from "./studio/manage-content/EditVideo.jsx";
 import ConfirmationPopup from "./elements/ConfirmationPopup.jsx";
+import UploadVideoPopup from "./studio/manage-content/UploadVideoPopup.jsx";
 export {
   Logo,
   Input,
@@ -50,4 +51,5 @@ export {
   DashboardDropdown,
   EditVideo,
   ConfirmationPopup,
+  UploadVideoPopup,
 };

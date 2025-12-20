@@ -16,12 +16,15 @@ import { FaRegMoon } from "react-icons/fa";
 import { PiVideoDuotone } from "react-icons/pi";
 import { IoCreateOutline } from "react-icons/io5";
 import { toggleStudioSidebar } from "../../store/slices/globalSlice.js";
+import { UploadVideoPopup } from "../index.js";
 
 const StudioNavbar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   //toggle  search for small screen
   const [showSearch, setShowSearch] = useState(false);
+  // upload video popup
+  const [isUploadVideoPopupOpen, setIsUploadVideoPopupOpen] = useState(false);
   const { register, handleSubmit, reset } = useForm();
   // profile dropdown menu toggle
   const [isStudioProfileDropdownOpen, setIsStudioProfileDropdownOpen] =
@@ -64,8 +67,7 @@ const StudioNavbar = () => {
   const createOptions = [
     {
       text: "Upload Video",
-      onClick: () =>
-        navigate(`/studio/${username}/content/videos/upload-video`),
+      onClick: () => setIsUploadVideoPopupOpen(true),
     },
     { text: "Create Post", onClick: () => navigate("/create-post") },
   ];
@@ -195,6 +197,11 @@ const StudioNavbar = () => {
           </div>
         )}
       </div>
+      {/* Modal */}
+      <UploadVideoPopup
+        isOpen={isUploadVideoPopupOpen}
+        onClose={() => setIsUploadVideoPopupOpen(false)}
+      />
     </nav>
   );
 };

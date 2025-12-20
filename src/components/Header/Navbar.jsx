@@ -23,6 +23,7 @@ import { HiOutlinePlus } from "react-icons/hi";
 import { PiVideoDuotone } from "react-icons/pi";
 import { IoCreateOutline } from "react-icons/io5";
 import ClickAwayListener from "react-click-away-listener";
+import { UploadVideoPopup } from "../index.js";
 
 const Navbar = () => {
   const dispatch = useDispatch();
@@ -31,6 +32,8 @@ const Navbar = () => {
   const [showSearch, setShowSearch] = useState(false);
   // create button dropdown toggle
   const [isCreateDropdownOpen, setIsCreateDropdownOpen] = useState(false);
+  // upload video popup
+  const [isUploadVideoPopupOpen, setIsUploadVideoPopupOpen] = useState(false);
   // toggle
   const { sidebar, navbar } = useSelector((state) => state.global);
   const navigate = useNavigate();
@@ -69,8 +72,7 @@ const Navbar = () => {
   const createOptions = [
     {
       text: "Upload Video",
-      onClick: () =>
-        navigate(navigate(`/studio/${username}/content/videos/upload-video`)),
+      onClick: () => setIsUploadVideoPopupOpen(true),
     },
     { text: "Create Post", onClick: () => navigate("/create-post") },
   ];
@@ -192,6 +194,11 @@ const Navbar = () => {
           </button>
         )}
       </div>
+      {/* Modal */}
+      <UploadVideoPopup
+        isOpen={isUploadVideoPopupOpen}
+        onClose={() => setIsUploadVideoPopupOpen(false)}
+      />
     </nav>
   );
 };
