@@ -32,7 +32,7 @@ const DropdownMenu = ({
           </div>
           <p
             className="text-blue-400 mt-2 cursor-pointer"
-            onClick={() => navigate(`/channel/${username}`)}
+            onClick={() => navigate(`/channel/${username}/featured`)}
           >
             view your channel
           </p>
