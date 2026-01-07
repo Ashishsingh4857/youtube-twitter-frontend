@@ -10,6 +10,10 @@ import {
   EditProfile,
   VideoTable,
   EditVideo,
+  ChannelFeatured,
+  ChannelVideos,
+  ChannelPlaylists,
+  ChannelPost,
 } from "../components/index.js";
 import {
   HomePage,
@@ -41,14 +45,12 @@ function App() {
               </ProtectedRoute>
             }
           />
-          <Route
-            path="channel/:username"
-            element={
-              <ProtectedRoute>
-                <Channel />
-              </ProtectedRoute>
-            }
-          />
+          <Route path="channel/:username" element={<Channel />}>
+            <Route path="featured" element={<ChannelFeatured />} />
+            <Route path="videos" element={<ChannelVideos />} />
+            <Route path="playlist" element={<ChannelPlaylists />} />
+            <Route path="post" element={<ChannelPost />} />
+          </Route>
         </Route>
         <Route
           path="/watch/:videoId"

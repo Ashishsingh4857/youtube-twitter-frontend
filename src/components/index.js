@@ -25,6 +25,10 @@ import DashboardDropdown from "./elements/DashboardDropdown.jsx";
 import EditVideo from "./studio/manage-content/EditVideo.jsx";
 import ConfirmationPopup from "./elements/ConfirmationPopup.jsx";
 import UploadVideoPopup from "./studio/manage-content/UploadVideoPopup.jsx";
+import ChannelVideos from "./channel/nav/Videos.jsx";
+import ChannelPlaylists from "./channel/nav/Playlists.jsx";
+import ChannelPost from "./channel/nav/Post.jsx";
+import ChannelFeatured from "./channel/nav/Featured.jsx";
 export {
   Logo,
   Input,
@@ -52,4 +56,8 @@ export {
   EditVideo,
   ConfirmationPopup,
   UploadVideoPopup,
+  ChannelFeatured,
+  ChannelVideos,
+  ChannelPlaylists,
+  ChannelPost,
 };
