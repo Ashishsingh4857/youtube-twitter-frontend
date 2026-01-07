@@ -53,7 +53,7 @@ const Navbar = () => {
     { text: "Sign out", onClick: handleLogout },
     {
       text: "Creator Studio",
-      onClick: () => navigate(`/studio/${userData.username}`),
+      onClick: () => navigate(`/studio/${userData?.username}/dashboard`),
     },
     { text: "Google Account" },
     { text: "Switch account" },

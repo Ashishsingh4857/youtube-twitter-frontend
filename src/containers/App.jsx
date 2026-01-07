@@ -17,6 +17,7 @@ import {
   Channel,
   ProfileCustomization,
   ContentManagement,
+  StudioDashboard,
 } from "../pages/index.js";
 import { useDispatch } from "react-redux";
 import { getCurrentUser } from "../store/slices/authSlice.js";
@@ -59,6 +60,7 @@ function App() {
         />
         {/* studio */}
         <Route path="/studio/:username" element={<StudioLayout />}>
+          <Route path="dashboard" element={<StudioDashboard />} />
           <Route path="customization" element={<ProfileCustomization />}>
             <Route path="profile" element={<EditProfile />} />
             <Route path="home-tab" element={<EditProfile />} />
