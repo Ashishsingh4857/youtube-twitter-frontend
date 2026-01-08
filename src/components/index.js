@@ -29,6 +29,7 @@ import ChannelVideos from "./channel/nav/Videos.jsx";
 import ChannelPlaylists from "./channel/nav/Playlists.jsx";
 import ChannelPost from "./channel/nav/Post.jsx";
 import ChannelFeatured from "./channel/nav/Featured.jsx";
+import VideoSlider from "./Video/VideoSlider.jsx";
 export {
   Logo,
   Input,
@@ -60,4 +61,5 @@ export {
   ChannelVideos,
   ChannelPlaylists,
   ChannelPost,
+  VideoSlider,
 };
