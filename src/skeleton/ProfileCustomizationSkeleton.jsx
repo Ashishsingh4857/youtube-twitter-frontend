@@ -2,7 +2,7 @@ import React from "react";
 
 const ProfileCustomizationSkeleton = () => {
   return (
-    <div className="bg-gray-900 w-full min-h-screen max-w-screen h-full text-white p-6 mt-16 ml-64">
+    <div className="bg-gray-900 min-h-screen max-w-screen h-full text-white p-6 mt-16 ml-64">
       <div className="h-8 w-1/4 bg-gray-800 rounded-md mb-4"></div>
 
       {/* Cover Image Skeleton */}

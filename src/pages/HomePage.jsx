@@ -10,10 +10,9 @@ const Homepage = () => {
   const { isOpen } = useSelector((state) => state.global.sidebar);
   const dispatch = useDispatch();
   //taking videos from store
-  const videos = useSelector((state) => state.video?.videos?.docs);
-  const loading = useSelector((state) => state.video?.loading);
+  const videos = useSelector((state) => state.video.videos.docs);
+  const loading = useSelector((state) => state.video.loading);
   const [isLoading, setIsLoading] = useState(false);
-  console.log(videos);
 
   useEffect(() => {
     dispatch(getAllVideos({ page: 1, limit: 10 }));
@@ -30,7 +29,7 @@ const Homepage = () => {
 
   return (
     <main
-      className={`p-4 h-full w-full bg-gray-900 mt-14 overflow-y-auto-auto ${
+      className={`p-4 h-full min-h-screen bg-gray-900 mt-14 overflow-y-auto-auto ${
         isOpen ? "ml-60 md:ml-25" : "ml-0 md:ml-25"
       }`}
       onClick={isOpen ? () => dispatch(toggleSidebar()) : null}
