@@ -35,7 +35,7 @@ const StudioSidebar = ({ className }) => {
     {
       name: "Content",
       icon: <AiOutlineVideoCamera size={25} />,
-      path: `/studio/${username}/content`,
+      path: `/studio/${username}/content/videos`,
     },
     {
       name: "Analytics",
@@ -65,7 +65,7 @@ const StudioSidebar = ({ className }) => {
     {
       name: "Customization",
       icon: <AiOutlineEdit size={25} />,
-      path: `/studio/${username}/customization`,
+      path: `/studio/${username}/customization/profile`,
     },
     {
       name: "Audio library",
