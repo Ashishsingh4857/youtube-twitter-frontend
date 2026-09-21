@@ -13,6 +13,7 @@ import {
 import { SlLike, SlDislike } from "react-icons/sl";
 import { RiShareForwardLine } from "react-icons/ri";
 import VideoDetailSkeleton from "../skeleton/VideoDetailSkeleton.jsx";
+import { toggleVideoReaction } from "../store/slices/reactionSlice.js";
 
 function VideoDetail() {
   // toggle sidebar
@@ -32,7 +33,6 @@ function VideoDetail() {
   const { video } = useSelector((state) => state.video);
   //all videos docs
   const videos = useSelector((state) => state.video?.videos?.docs);
-
   useEffect(() => {
     if (videoId) {
       dispatch(getVideoById({ videoId }));
@@ -41,6 +41,22 @@ function VideoDetail() {
   useEffect(() => {
     dispatch(getAllVideos({ page: 1, limit: 10 }));
   }, [dispatch]);
+  //reactions
+  const reaction = useSelector(
+    (state) => state.reaction.reactions[videoId]
+  ) ?? {
+    likeCount: 0,
+    dislikeCount: 0,
+    userReaction: null,
+    loading: false,
+  };
+  const { likeCount, dislikeCount, userReaction } = reaction;
+
+  // reaction handler like/dislike
+  const handleReaction = async (type) => {
+    await dispatch(toggleVideoReaction({ videoId, reactionType: type }));
+  };
+
   // if loading
   const loading = useSelector((state) => state.video?.loading);
   if (loading) {
@@ -143,25 +159,28 @@ function VideoDetail() {
                 <div className="h-9 p-2 w-30 rounded-full bg-gray-700 flex items-center justify-between">
                   <button
                     className={`flex items-center justify-center h-6 w-6 rounded-full transition-all duration-200 ease-in-out ${
-                      isLiked
+                      userReaction === "like"
                         ? "bg-white text-black scale-105"
                         : "bg-gray-700 text-white hover:bg-gray-600"
                     }`}
-                    onClick={() => setIsLiked(!isLiked)}
+                    onClick={() => handleReaction("like")}
                   >
                     <SlLike size={20} />
                   </button>
-                  <span className="text-white text-xs px-2">600k</span>
+                  <span className="text-white text-xs px-2">{likeCount}</span>
                   <button
                     className={`flex items-center justify-center h-6 w-6 rounded-full transition-all duration-200 ease-in-out ${
-                      isDisliked
+                      userReaction === "dislike"
                         ? "bg-white text-black scale-105"
                         : "bg-gray-700 text-white hover:bg-gray-600"
                     }`}
-                    onClick={() => setIsDisliked(!isDisliked)}
+                    onClick={() => handleReaction("dislike")}
                   >
                     <SlDislike size={20} />
                   </button>
+                  <span className="text-white text-xs px-2">
+                    {dislikeCount}
+                  </span>
                 </div>
                 <div className="h-9 p-2 w-20 rounded-full bg-gray-700 flex items-center ">
                   <button
