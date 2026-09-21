@@ -4,6 +4,7 @@ import authSliceReducer from "./slices/authSlice.js";
 import globalSliceReducer from "./slices/globalSlice.js";
 import videoSliceReducer from "./slices/videoSlice.js";
 import userSliceReducer from "./slices/userSlice.js";
+import reactionSliceReducer from "./slices/reactionSlice.js";
 
 const store = configureStore({
   reducer: {
@@ -11,6 +12,7 @@ const store = configureStore({
     global: globalSliceReducer,
     video: videoSliceReducer,
     user: userSliceReducer,
+    reaction: reactionSliceReducer,
   },
 });
 
