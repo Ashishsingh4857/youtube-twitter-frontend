@@ -14,6 +14,7 @@ import { SlLike, SlDislike } from "react-icons/sl";
 import { RiShareForwardLine } from "react-icons/ri";
 import VideoDetailSkeleton from "../skeleton/VideoDetailSkeleton.jsx";
 import { toggleVideoReaction } from "../store/slices/reactionSlice.js";
+import SubscribeButton from "../components/elements/SubscribeButton.jsx";
 
 function VideoDetail() {
   // toggle sidebar
@@ -145,13 +146,9 @@ function VideoDetail() {
                     {owner?.subscribersCount} Subscribers
                   </span>
                 </div>
+                {/* channel subscribe */}
                 <div className="lg:ml-4">
-                  <Button
-                    onClick={() => setIsSubscribed(!isSubscribed)}
-                    className="w-22 h-8 md:w-24 md:h-9 text-center bg-gray-500 hover:bg-gray-700 rounded-full text-white text-xs md:text-sm transition-colors duration-200"
-                  >
-                    {isSubscribed ? "Subscribed" : "Subscribe"}
-                  </Button>
+                  {owner && <SubscribeButton channelId={owner._id} />}
                 </div>
               </div>
               {/* channel likes section */}
