@@ -14,8 +14,13 @@ const globalSlice = createSlice({
   name: "globalSlice",
   initialState,
   reducers: {
+    //for toggle the sidebar
     toggleSidebar: (state) => {
       state.sidebar.isOpen = !state.sidebar.isOpen;
+    },
+    //  added for ClickAwayListener to always close sidebar
+    setSidebarOpen: (state, action) => {
+      state.sidebar.isOpen = action.payload;
     },
     toggleStudioSidebar: (state) => {
       state.sidebar.isActive = !state.sidebar.isActive;
@@ -26,6 +31,10 @@ const globalSlice = createSlice({
   },
 });
 
-export const { toggleSidebar, toggleStudioSidebar, setIsProfileDropdownOpen } =
-  globalSlice.actions;
+export const {
+  toggleSidebar,
+  setSidebarOpen,
+  toggleStudioSidebar,
+  setIsProfileDropdownOpen,
+} = globalSlice.actions;
 export default globalSlice.reducer;

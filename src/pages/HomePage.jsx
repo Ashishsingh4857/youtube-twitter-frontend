@@ -29,9 +29,7 @@ const Homepage = () => {
 
   return (
     <main
-      className={`p-4 h-full min-h-screen bg-gray-900 mt-14 overflow-y-auto-auto ${
-        isOpen ? "ml-60 md:ml-25" : "ml-0 md:ml-25"
-      }`}
+      className="p-4 w-full min-h-[calc(100vh-56px)] bg-gray-900"
       onClick={isOpen ? () => dispatch(toggleSidebar()) : null}
     >
       {/* section Recommended---> */}

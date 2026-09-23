@@ -1,6 +1,11 @@
-import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
-import { AiOutlineHome, AiOutlineHistory } from "react-icons/ai";
+import React from "react";
+import { Link, NavLink } from "react-router-dom";
+import {
+  AiOutlineHome,
+  AiOutlineHistory,
+  AiOutlineSetting,
+  AiOutlineMessage,
+} from "react-icons/ai";
 import { GrMultimedia } from "react-icons/gr";
 import { FaUserCircle } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
@@ -10,208 +15,226 @@ import { BiLike } from "react-icons/bi";
 import { SiYoutubeshorts } from "react-icons/si";
 import { RxAvatar } from "react-icons/rx";
 import { GoChevronRight } from "react-icons/go";
-import { MdMenuOpen } from "react-icons/md";
-import { Logo } from "../index.js";
-import { toggleSidebar } from "../../store/slices/globalSlice.js";
+import ClickAwayListener from "react-click-away-listener";
+import { setSidebarOpen } from "../../store/slices/globalSlice";
 
-const Sidebar = () => {
+const Sidebar = ({ className }) => {
+  const dispatch = useDispatch();
   //toggle sidebar
   const { isOpen } = useSelector((state) => state.global.sidebar);
-  const dispatch = useDispatch();
   //user
   const { userData } = useSelector((state) => state.auth);
 
+  //list bottom items
+  const bottomItems = [
+    {
+      name: "Settings",
+      icon: <AiOutlineSetting size={20} />,
+      path: `/settings`,
+    },
+    {
+      name: "Send feedback",
+      icon: <AiOutlineMessage size={20} />,
+      path: `/feedback`,
+    },
+  ];
+
+  const linkBase =
+    "p-2.5 rounded-lg text-white transition-all duration-200 flex items-center overflow-hidden";
+  const labelOpen = "text-sm font-normal capitalize truncate whitespace-nowrap";
+  const labelClosed =
+    "text-[9px] font-normal capitalize whitespace-nowrap overflow-hidden text-center leading-tight max-w-full";
+
   return (
-    <aside
-      className={`${isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0 md:w-25 top-14"} fixed left-0 top-0 w-60 h-full p-4 bg-gray-900 border-r border-gray-800 overflow-y-auto transition-transform duration-300  z-10`}
-    >
-      {/* logo section-----> */}
-      {isOpen ? (
-        <section className="flex items-center">
+    <ClickAwayListener onClickAway={() => dispatch(setSidebarOpen(false))}>
+      <aside
+        className={`text-white p-3 flex flex-col justify-between border-r border-gray-500 bg-gray-900 fixed left-0 top-[56px] h-[calc(100%-56px)] overflow-y-auto overflow-x-hidden z-10 transition-all duration-300 ease-in-out ${isOpen ? "translate-x-0 w-60" : "-translate-x-full md:translate-x-0 md:w-[72px]"} ${className || ""}`}
+      >
+        <div className="w-full">
+          {/* top section */}
+          <section>
+            <ul className="space-y-1 w-full">
+              <li>
+                <NavLink
+                  to="/"
+                  className={({ isActive }) =>
+                    `${linkBase} ${isOpen ? "space-x-3" : "flex-col justify-center gap-1 text-center"} ${isActive ? "bg-gray-800" : "hover:bg-gray-800"}`
+                  }
+                >
+                  <AiOutlineHome size={20} className="shrink-0" />
+                  <span className={isOpen ? labelOpen : labelClosed}>Home</span>
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  to=""
+                  className={({ isActive }) =>
+                    `${linkBase} ${isOpen ? "space-x-3" : "flex-col justify-center gap-1 text-center"} ${isActive ? "bg-gray-800" : "hover:bg-gray-800"}`
+                  }
+                >
+                  <SiYoutubeshorts size={20} className="shrink-0" />
+                  <span className={isOpen ? labelOpen : labelClosed}>
+                    Shorts
+                  </span>
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  to="/subscriptions"
+                  className={({ isActive }) =>
+                    `${linkBase} ${isOpen ? "space-x-3" : "flex-col justify-center gap-1 text-center"} ${isActive ? "bg-gray-800" : "hover:bg-gray-800"}`
+                  }
+                >
+                  <GrMultimedia size={20} className="shrink-0" />
+                  <span className={isOpen ? labelOpen : labelClosed}>
+                    Subscriptions
+                  </span>
+                </NavLink>
+              </li>
+            </ul>
+          </section>
+          {/* toggle if true --------->*/}
           {isOpen ? (
             <>
-              <MdMenuOpen
-                className="text-2xl mr-4 cursor-pointer text-gray-400 hover:text-white transition-colors"
-                onClick={() => dispatch(toggleSidebar())}
-              />
+              {/* border */}
+              <div className="w-full border-b border-gray-700 my-2"></div>
+              {/* you section */}
+              <section>
+                <Link to={`/users/c/${userData?.username}`}>
+                  <div className="flex items-center p-2">
+                    <h2 className="text-sm font-medium text-gray-400 mr-2 capitalize">
+                      You
+                    </h2>
+                    <GoChevronRight className="text-gray-400" />
+                  </div>
+                </Link>
+                <ul className="space-y-1">
+                  <li>
+                    <NavLink
+                      to="/history"
+                      className={({ isActive }) =>
+                        `${linkBase} space-x-3 ${isActive ? "bg-gray-800" : "hover:bg-gray-800"}`
+                      }
+                    >
+                      <span className="shrink-0">
+                        <AiOutlineHistory size={20} />
+                      </span>
+                      <span className={labelOpen}>History</span>
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      to="/playlist"
+                      className={({ isActive }) =>
+                        `${linkBase} space-x-3 ${isActive ? "bg-gray-800" : "hover:bg-gray-800"}`
+                      }
+                    >
+                      <span className="shrink-0">
+                        <RiPlayList2Fill size={20} />
+                      </span>
+                      <span className={labelOpen}>Playlists</span>
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      to="/Liked-videos"
+                      className={({ isActive }) =>
+                        `${linkBase} space-x-3 ${isActive ? "bg-gray-800" : "hover:bg-gray-800"}`
+                      }
+                    >
+                      <span className="shrink-0">
+                        <BiLike size={20} />
+                      </span>
+                      <span className={labelOpen}>Liked videos</span>
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      to="/"
+                      className={({ isActive }) =>
+                        `${linkBase} space-x-3 ${isActive ? "bg-gray-800" : "hover:bg-gray-800"}`
+                      }
+                    >
+                      <span className="shrink-0">
+                        <GoVideo size={20} />
+                      </span>
+                      <span className={labelOpen}>Your videos</span>
+                    </NavLink>
+                  </li>
+                </ul>
+              </section>
+              {/* border */}
+              <div className="w-full border-b border-gray-700 my-2"></div>
+              {/* subscriptions section */}
+              <section>
+                <div className="flex p-2 items-center">
+                  <h2 className="text-sm font-medium text-gray-400 mr-2 capitalize truncate">
+                    Subscriptions
+                  </h2>
+                  <GoChevronRight className="text-gray-400 shrink-0" />
+                </div>
+                <ul className="space-y-1">
+                  <li>
+                    <NavLink
+                      to="/channel/1"
+                      className={({ isActive }) =>
+                        `${linkBase} space-x-3 ${isActive ? "bg-gray-700" : "hover:bg-gray-600"}`
+                      }
+                    >
+                      <FaUserCircle size={20} className="shrink-0" />
+                      <span className={labelOpen}>Channel 1</span>
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      to="/channel"
+                      className={({ isActive }) =>
+                        `${linkBase} space-x-3 ${isActive ? "bg-gray-700" : "hover:bg-gray-600"}`
+                      }
+                    >
+                      <FaUserCircle size={20} className="shrink-0" />
+                      <span className={labelOpen}>Channel 2</span>
+                    </NavLink>
+                  </li>
+                </ul>
+              </section>
             </>
           ) : (
             <>
-              <AiOutlineMenu
-                className="text-2xl mr-4 cursor-pointer text-gray-400 hover:text-white transition-colors"
-                onClick={() => dispatch(toggleSidebar())}
-              />
+              <div className="mt-2 w-full">
+                <NavLink
+                  to={`/users/c/${userData?.username}`}
+                  className={({ isActive }) =>
+                    `${linkBase} flex-col justify-center gap-1 text-center ${isActive ? "bg-gray-800" : "hover:bg-gray-800"}`
+                  }
+                >
+                  <RxAvatar size={20} className="shrink-0" />
+                  <span className={labelClosed}>You</span>
+                </NavLink>
+              </div>
             </>
           )}
-          <Logo className="hidden sm:block" />
-        </section>
-      ) : (
-        ""
-      )}
-      {/* top section */}
-      <section>
-        <ul className={`${isOpen ? "space-y-1" : "space-y-4"}`}>
-          <li>
-            <Link
-              to="/"
-              className={`${isOpen ? "flex items-center space-x-3" : "flex flex-col items-center"} p-3 rounded-lg hover:bg-gray-700 text-white`}
-            >
-              <AiOutlineHome className="text-xl" />
-              <span
-                className={`${isOpen ? "text-sm font-light capitalize sm:text-base" : "text-xs font-small mt-2 capitalize sm:text-sm"}`}
+        </div>
+        {/* bottom settings section */}
+        <ul className="mt-4 space-y-1 border-t border-gray-700 pt-2 w-full">
+          {bottomItems.map((item, index) => (
+            <li key={index}>
+              <NavLink
+                to={item.path}
+                className={({ isActive }) =>
+                  `${linkBase} ${isOpen ? "space-x-3" : "flex-col justify-center gap-1 text-center"} ${isActive ? "bg-gray-700" : "hover:bg-gray-600"}`
+                }
               >
-                Home
-              </span>
-            </Link>
-          </li>
-          <li>
-            <Link
-              to=""
-              className={`${isOpen ? "flex items-center space-x-3" : "flex flex-col items-center"} p-3 rounded-lg hover:bg-gray-700 text-white`}
-            >
-              <SiYoutubeshorts className="text-xl" />
-              <span
-                className={`${isOpen ? "text-sm font-light capitalize sm:text-base" : "text-xs font-small mt-2 capitalize sm:text-sm"}`}
-              >
-                Shorts
-              </span>
-            </Link>
-          </li>
-          <li>
-            <Link
-              to="/subscriptions"
-              className={`${isOpen ? "flex items-center space-x-3" : "flex flex-col items-center"} p-3 rounded-lg hover:bg-gray-700 text-white`}
-            >
-              <GrMultimedia className="text-xl mr-3" />
-              <span
-                className={`${isOpen ? "text-sm font-light capitalize sm:text-base" : "text-xs font-small mt-2 capitalize sm:text-sm"}`}
-              >
-                Subscriptions
-              </span>
-            </Link>
-          </li>
-        </ul>
-      </section>
-      {/* toggle if true  --------->*/}
-      {isOpen ? (
-        <>
-          {/* border */}
-          <div className="w-full border-b border-gray-700 mt-2"></div>
-          {/* you section */}
-          <section>
-            <Link to={`/users/c/${userData?.username}`}>
-              <div className="flex items-center p-2 ">
-                <h2 className="text-sm font-medium text-gray-400  mr-3 capitalize sm:text-base">
-                  You
-                </h2>
-                <GoChevronRight className=" text-gray-400 font-bold" />
-              </div>
-            </Link>
-            <ul className={`${isOpen ? "space-y-1" : "space-y-4"}`}>
-              <li>
-                <Link
-                  to="/history"
-                  className={`${isOpen ? "flex items-center space-x-3" : "flex flex-col items-center"} p-3 rounded-lg hover:bg-gray-700 text-white`}
-                >
-                  <AiOutlineHistory className="text-xl mr-3" />
-                  <span className="text-sm font-light capitalize sm:text-base">
-                    History
-                  </span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/playlist"
-                  className={`${isOpen ? "flex items-center space-x-3" : "flex flex-col items-center"} p-3 rounded-lg hover:bg-gray-700 text-white`}
-                >
-                  <RiPlayList2Fill className="text-xl" />
-                  <span className="text-sm font-light capitalize sm:text-base">
-                    Playlists
-                  </span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/Liked-videos"
-                  className={`${isOpen ? "flex items-center space-x-3" : "flex flex-col items-center"} p-3 rounded-lg hover:bg-gray-700 text-white`}
-                >
-                  <BiLike className="text-xl" />
-                  <span className="text-sm font-light capitalize sm:text-base">
-                    Liked videos
-                  </span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/"
-                  className={`${isOpen ? "flex items-center space-x-3" : "flex flex-col items-center"} p-3 rounded-lg hover:bg-gray-700 text-white`}
-                >
-                  <GoVideo className="text-xl" />
-                  <span className="text-sm font-light capitalize sm:text-base">
-                    Your videos
-                  </span>
-                </Link>
-              </li>
-            </ul>
-          </section>
-          {/* border */}
-          <div className="w-full border-b border-gray-700 mt-2"></div>
-          {/* subscriptions section */}
-          <section>
-            <div className="flex p-3 items-center">
-              <h2 className="text-sm font-medium text-gray-400  mr-3 capitalize sm:text-base">
-                Subscriptions
-              </h2>
-              <GoChevronRight className=" text-gray-400 font-bold" />
-            </div>
-            <ul className="space-y-2">
-              <li>
-                <Link
-                  to="/channel/1"
-                  className="flex items-center p-2 rounded-lg hover:bg-gray-700 text-white"
-                >
-                  <FaUserCircle className="text-xl mr-2" />
-                  {isOpen && (
-                    <span className="text-sm font-light capitalize sm:text-base">
-                      Channel 1
-                    </span>
-                  )}
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/channel"
-                  className="flex items-center p-2 rounded-lg hover:bg-gray-700 text-white"
-                >
-                  <FaUserCircle className="text-xl mr-2" />
-                  {isOpen && (
-                    <span className="text-sm font-light capitalize sm:text-base">
-                      Channel 2
-                    </span>
-                  )}
-                </Link>
-              </li>
-            </ul>
-          </section>
-        </>
-      ) : (
-        <>
-          <div className="mt-3">
-            <li>
-              <Link
-                to={`/users/c/${userData?.username}`}
-                className={`${isOpen ? "flex items-center space-x-3" : "flex flex-col items-center"} p-3 rounded-lg hover:bg-gray-700 text-white`}
-              >
-                <RxAvatar className="text-xl" />
-                <span className="text-sm font-light capitalize sm:text-base">
-                  You
+                <span className="shrink-0">{item.icon}</span>
+                <span className={isOpen ? labelOpen : labelClosed}>
+                  {isOpen ? item.name : item.name.split(" ")[0]}
                 </span>
-              </Link>
+              </NavLink>
             </li>
-          </div>
-        </>
-      )}
-    </aside>
+          ))}
+        </ul>
+      </aside>
+    </ClickAwayListener>
   );
 };
 
