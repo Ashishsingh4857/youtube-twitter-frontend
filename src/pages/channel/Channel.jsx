@@ -73,9 +73,7 @@ const UserChannelProfile = () => {
   ];
 
   return (
-    <div
-      className={`p-2 md:p-4 lg:p-6 h-full min-h-screen bg-gray-900 mt-14 overflow-y-auto ${isOpen ? "ml-60 md:ml-25" : "ml-0 md:ml-25"}`}
-    >
+    <div className="p-2 md:p-4 lg:p-6 w-full min-h-[calc(100vh-56px)] bg-gray-900">
       <div className="h-30 md:h-48 bg-gray-200 mx-4 md:mx-8 lg:mx-16">
         <img
           src={coverImage?.url || coverImage || DEFAULT_COVER_IMAGE_URL}
