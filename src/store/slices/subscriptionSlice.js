@@ -95,12 +95,21 @@ const subscriptionSlice = createSlice({
         state.statusLoading = false;
       })
 
+      .addCase(fetchMySubscriptions.pending, (state) => {
+        state.loading = true;
+      })
       .addCase(fetchMySubscriptions.fulfilled, (state, action) => {
-        state.mySubscriptions = action.payload || [];
-        (action.payload || []).forEach((sub) => {
-          const id = sub.channel?._id || sub.channel || sub._id;
+        state.loading = false;
+        const list = Array.isArray(action.payload) ? action.payload : [];
+        state.mySubscriptions = list;
+
+        list.forEach((channel) => {
+          const id = channel?._id;
           if (id) state.subscribedMap[id] = true;
         });
+      })
+      .addCase(fetchMySubscriptions.rejected, (state) => {
+        state.loading = false;
       });
   },
 });
