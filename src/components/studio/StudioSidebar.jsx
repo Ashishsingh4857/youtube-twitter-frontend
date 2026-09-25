@@ -48,6 +48,11 @@ const StudioSidebar = ({ className }) => {
       path: `/studio/${username}/community`,
     },
     {
+      name: "subscribers",
+      icon: <AiOutlineUsergroupAdd size={25} />,
+      path: `/studio/${username}/subscribers`,
+    },
+    {
       name: "Subtitles",
       icon: <AiOutlineFileText size={25} />,
       path: `/studio/${username}//subtitles`,
