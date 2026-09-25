@@ -6,6 +6,7 @@ const initialState = {
   statusLoading: false,
   subscribedMap: {},
   channelSubscribers: [],
+  subscribersCount: 0,
   mySubscriptions: [],
 };
 
@@ -59,6 +60,40 @@ export const fetchMySubscriptions = createAsyncThunk(
   }
 );
 
+// Fetch channel subscribers
+export const fetchChannelSubscribers = createAsyncThunk(
+  "subscription/fetchChannelSubscribers",
+  async (channelId, { rejectWithValue }) => {
+    try {
+      const res = await axiosInstance.get(`subscriptions/c/${channelId}`);
+      console.log(res.data.data);
+      return res.data.data;
+    } catch (err) {
+      return rejectWithValue(
+        err.response?.data?.message || "Failed to fetch subscribers"
+      );
+    }
+  }
+);
+
+// Remove subscriber (studio owner)
+export const removeSubscriber = createAsyncThunk(
+  "subscription/removeSubscriber",
+  async (subscriberId, { rejectWithValue }) => {
+    try {
+      const res = await axiosInstance.delete(
+        `subscriptions/remove/${subscriberId}`
+      );
+
+      return subscriberId;
+    } catch (err) {
+      return rejectWithValue(
+        err.response?.data?.message || "Failed to remove subscriber"
+      );
+    }
+  }
+);
+
 const subscriptionSlice = createSlice({
   name: "subscription",
   initialState,
@@ -67,6 +102,7 @@ const subscriptionSlice = createSlice({
       state.subscribedMap = {};
       state.channelSubscribers = [];
       state.mySubscriptions = [];
+      state.subscribersCount = 0;
     },
   },
   extraReducers: (builder) => {
@@ -110,6 +146,27 @@ const subscriptionSlice = createSlice({
       })
       .addCase(fetchMySubscriptions.rejected, (state) => {
         state.loading = false;
+      })
+
+      // channel subscribers
+      .addCase(fetchChannelSubscribers.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchChannelSubscribers.fulfilled, (state, action) => {
+        state.loading = false;
+        state.channelSubscribers = action.payload.subscribers || [];
+        state.subscribersCount = action.payload.subscribersCount || 0;
+      })
+      .addCase(fetchChannelSubscribers.rejected, (state) => {
+        state.loading = false;
+      })
+
+      // remove subscriber
+      .addCase(removeSubscriber.fulfilled, (state, action) => {
+        state.channelSubscribers = state.channelSubscribers.filter(
+          (s) => s._id !== action.payload
+        );
+        state.subscribersCount = Math.max(0, state.subscribersCount - 1);
       });
   },
 });

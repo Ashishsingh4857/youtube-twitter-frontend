@@ -5,6 +5,7 @@ import ProfileCustomization from "./studio/manage-profile/ProfileCustomization.j
 import ContentManagement from "./studio/manage-content/ContentManagement.jsx";
 import StudioDashboard from "./studio/StudioDashboard.jsx";
 import Subscription from "./channel/Subscription.jsx";
+import Subscribers from "./studio/manage-profile/Subscribers.jsx";
 
 export {
   HomePage,
@@ -13,5 +14,6 @@ export {
   ProfileCustomization,
   ContentManagement,
   StudioDashboard,
+  Subscribers,
   Subscription,
 };

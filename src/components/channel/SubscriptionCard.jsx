@@ -18,7 +18,7 @@ export default function SubscriptionCard({
           className="w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover shrink-0 bg-[#272727]"
         />
         <div className="flex-1 min-w-0">
-          <h2 className="text-lg font-semibold truncate">
+          <h2 className="text-lg font-semibold truncate text-white">
             {channel?.fullName || channel?.username}
           </h2>
           <p className="text-sm text-gray-400 truncate">
