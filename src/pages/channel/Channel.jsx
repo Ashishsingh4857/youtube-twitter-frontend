@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useParams, useNavigate, NavLink, Outlet } from "react-router-dom";
 import { userChannelProfile } from "../../store/slices/userSlice.js";
 import { Button } from "../../components/index.js";
+import SubscribeButton from "../../components/elements/SubscribeButton.jsx";
 
 const UserChannelProfile = () => {
   const dispatch = useDispatch();
@@ -25,9 +26,9 @@ const UserChannelProfile = () => {
     avatar,
     coverImage,
     fullName,
-    isSubscribed,
     subscribersCount,
     totalVideos,
+    _id: channelId,
   } = channel || {};
 
   //show the subscribe button only if logged in user is not equal to userprofile user
@@ -49,13 +50,6 @@ const UserChannelProfile = () => {
 
   //user account management buttons
   const buttons = [
-    {
-      label: isSubscribed ? "subscribed" : "Subscribe",
-      className:
-        "bg-[#A855F7] rounded-full px-2 py-2 text-xs md:text-sm lg:text-base md:px-4 md:py-2",
-      onClick: () => console.log("Subscribe button clicked"),
-      show: !isOwnProfile,
-    },
     {
       label: "customize channel",
       className:
@@ -103,7 +97,10 @@ const UserChannelProfile = () => {
             </div>
           </div>
           {/* show the subscribe button only if logged in user is not equal to userprofile user */}
-          <div className=" mt-4 sm:mt-0 flex space-x-4">
+          <div className=" mt-4 sm:mt-0 flex space-x-4 items-center">
+            {!isOwnProfile && channelId && (
+              <SubscribeButton channelId={channelId} />
+            )}
             {buttons.map(
               (button, index) =>
                 button.show && (

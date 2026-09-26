@@ -14,14 +14,13 @@ import { SlLike, SlDislike } from "react-icons/sl";
 import { RiShareForwardLine } from "react-icons/ri";
 import VideoDetailSkeleton from "../skeleton/VideoDetailSkeleton.jsx";
 import { toggleVideoReaction } from "../store/slices/reactionSlice.js";
+import SubscribeButton from "../components/elements/SubscribeButton.jsx";
 
 function VideoDetail() {
   // toggle sidebar
   const { isOpen } = useSelector((state) => state.global.sidebar);
   // toggle description
   const [showFullDescription, setShowFullDescription] = useState(false);
-  // toggle subscribe button
-  const [isSubscribed, setIsSubscribed] = useState(false);
   // toggle likes
   const [isLiked, setIsLiked] = useState(false);
   const [isDisliked, setIsDisliked] = useState(false);
@@ -33,6 +32,9 @@ function VideoDetail() {
   const { video } = useSelector((state) => state.video);
   //all videos docs
   const videos = useSelector((state) => state.video?.videos?.docs);
+  // logged in user
+  const { userData } = useSelector((state) => state.auth);
+
   useEffect(() => {
     if (videoId) {
       dispatch(getVideoById({ videoId }));
@@ -81,6 +83,9 @@ function VideoDetail() {
 
   const { title, views, createdAt, description, owner, videoFile, thumbnail } =
     videoData;
+
+  // hide subscribe button on own video
+  const isOwnVideo = userData?._id === owner?._id;
 
   const truncatedDescription = description.substring(0, 50) + "...";
 
@@ -145,13 +150,22 @@ function VideoDetail() {
                     {owner?.subscribersCount} Subscribers
                   </span>
                 </div>
+                {/* channel subscribe - hide on own video */}
                 <div className="lg:ml-4">
-                  <Button
-                    onClick={() => setIsSubscribed(!isSubscribed)}
-                    className="w-22 h-8 md:w-24 md:h-9 text-center bg-gray-500 hover:bg-gray-700 rounded-full text-white text-xs md:text-sm transition-colors duration-200"
-                  >
-                    {isSubscribed ? "Subscribed" : "Subscribe"}
-                  </Button>
+                  {isOwnVideo ? (
+                    <Button
+                      className="bg-gray-700 rounded-full px-4 py-2 text-xs md:text-sm text-white"
+                      onClick={() =>
+                        navigate(
+                          `/studio/${userData?.username}/content/videos/edit/${videoId}`
+                        )
+                      }
+                    >
+                      Edit video
+                    </Button>
+                  ) : (
+                    owner && <SubscribeButton channelId={owner._id} />
+                  )}
                 </div>
               </div>
               {/* channel likes section */}
@@ -235,7 +249,7 @@ function VideoDetail() {
           </div>
         </div>
         {/* comments section show only after width < 786px*/}
-        <div className="block md:hidden  w-full h-[200px]">comments</div>
+        <div className="block md:hidden w-full h-[200px]">comments</div>
       </div>
     </>
   );
