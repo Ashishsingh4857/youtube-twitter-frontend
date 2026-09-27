@@ -22,6 +22,8 @@ import {
   ProfileCustomization,
   ContentManagement,
   StudioDashboard,
+  Subscription,
+  Subscribers,
 } from "../pages/index.js";
 import { useDispatch } from "react-redux";
 import { getCurrentUser } from "../store/slices/authSlice.js";
@@ -45,6 +47,7 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route path="subscriptions" element={<Subscription />} />
           <Route path="channel/:username" element={<Channel />}>
             <Route path="featured" element={<ChannelFeatured />} />
             <Route path="videos" element={<ChannelVideos />} />
@@ -63,6 +66,7 @@ function App() {
         {/* studio */}
         <Route path="/studio/:username" element={<StudioLayout />}>
           <Route path="dashboard" element={<StudioDashboard />} />
+          <Route path="subscribers" element={<Subscribers />} />
           <Route path="customization" element={<ProfileCustomization />}>
             <Route path="profile" element={<EditProfile />} />
             <Route path="home-tab" element={<EditProfile />} />
