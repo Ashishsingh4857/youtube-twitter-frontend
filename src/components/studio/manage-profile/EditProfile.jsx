@@ -170,7 +170,7 @@ const EditProfile = () => {
   return (
     <FormProvider {...methods}>
       <div
-        className={`bg-gray-900 p-8 min-h-screen max-w-screen h-full text-white${
+        className={` p-8 min-h-screen max-w-screen h-full text-white${
           isActive ? "ml-64" : "ml-16"
         }`}
       >
@@ -181,7 +181,7 @@ const EditProfile = () => {
               For the best results on all devices, use an image that’s at least
               2048 x 1152 pixels and 6MB or less.
             </p>
-            <div className="relative w-full h-48 bg-gray-800 rounded-md shadow-lg border-4 border-white">
+            <div className="relative w-full h-48  rounded-md shadow-lg border-4 border-white">
               {selectedCoverPhoto ? (
                 <img
                   src={coverPhotoPreview}
@@ -210,7 +210,7 @@ const EditProfile = () => {
             </div>
 
             {/* edit avatar section*/}
-            <div className="relative w-32 h-32 -mt-16 ml-4 bg-gray-800 rounded-full shadow-lg border-4 border-white">
+            <div className="relative w-32 h-32 -mt-16 ml-4  rounded-full shadow-lg border-4 border-white">
               {selectedAvatar ? (
                 <img
                   src={avatarPreview}
@@ -268,7 +268,7 @@ const EditProfile = () => {
                 multiple
                 value={selectedFields}
                 onChange={handleFieldChange}
-                className="w-full p-2 bg-gray-800 rounded-md shadow-lg"
+                className="w-full p-2  rounded-md shadow-lg"
               >
                 <option
                   className="p-4 border rounded-md mb-2 text-white "
@@ -307,7 +307,7 @@ const EditProfile = () => {
                 <Input
                   type="email"
                   {...methods.register("email")}
-                  className="w-full p-2 bg-gray-800 rounded-md shadow-lg"
+                  className="w-full p-2  rounded-md shadow-lg"
                 />
               </div>
             </>
@@ -328,7 +328,7 @@ const EditProfile = () => {
                 <Input
                   type="text"
                   {...methods.register("fullName")}
-                  className="w-full p-2 bg-gray-800 rounded-md shadow-lg"
+                  className="w-full p-2  rounded-md shadow-lg"
                 />
               </div>
             </>
@@ -348,7 +348,7 @@ const EditProfile = () => {
                 <Input
                   type="text"
                   {...methods.register("username")}
-                  className="w-full p-2 bg-gray-800 rounded-md shadow-lg"
+                  className="w-full p-2  rounded-md shadow-lg"
                 />
               </div>
             </>

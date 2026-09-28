@@ -87,7 +87,7 @@ const EditVideo = () => {
   }
 
   return (
-    <div className="p-6 bg-gray-900 text-white min-h-screen">
+    <div className="p-6 text-white min-h-screen">
       <div className="flex justify-between mb-4 flex-wrap">
         <h1 className="text-2xl font-bold">Edit Video details</h1>
         <div className="mt-2 md:mt-0">
@@ -117,7 +117,7 @@ const EditVideo = () => {
               <input
                 type="text"
                 {...register("title", { required: true })}
-                className="w-full p-2 bg-gray-800 rounded "
+                className="w-full p-2  rounded "
                 maxLength={100}
               />
               {errors.title && (
@@ -131,7 +131,7 @@ const EditVideo = () => {
               <label className="block mb-1">Description</label>
               <textarea
                 {...register("description")}
-                className="w-full p-2 bg-gray-800 rounded "
+                className="w-full p-2  rounded "
                 rows={6}
               />
             </div>
@@ -152,7 +152,7 @@ const EditVideo = () => {
                     className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                   />
                   <label htmlFor="thumbnail">
-                    <div className="h-25 bg-gray-800 p-4 rounded cursor-pointer hover:bg-gray-700 flex flex-col items-center border ">
+                    <div className="h-25  p-4 rounded cursor-pointer  flex flex-col items-center border ">
                       {thumbnailPreview && (
                         <img
                           src={thumbnailPreview}
@@ -187,7 +187,7 @@ const EditVideo = () => {
           </div>
           {/* Right Column */}
           <div>
-            <div className="mb-4 bg-gray-800 rounded">
+            <div className="mb-4  rounded">
               {/* Aspect‑ratio container – forces 16:9 shape */}
               <div className="aspect-video bg-black w-full">
                 <video
@@ -205,7 +205,7 @@ const EditVideo = () => {
             <div className="relative">
               <label className="block mb-1">Visibility</label>
               <div
-                className="flex items-center cursor-pointer w-full p-2 bg-gray-800 rounded"
+                className="flex items-center cursor-pointer w-full p-2  rounded"
                 onClick={() =>
                   setVideoVisibilityDropdown(
                     VideoVisibilityDropdown === videoId ? null : videoId
