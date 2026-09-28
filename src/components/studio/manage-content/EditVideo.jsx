@@ -111,13 +111,13 @@ const EditVideo = () => {
       <form onSubmit={handleSubmit(onSubmit)} id="EditVideoForm">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Left Column */}
-          <div>
+          <div className="border border-gray-700 rounded-lg p-4">
             <div className="mb-4">
               <label className="block mb-1">Title (required)</label>
               <input
                 type="text"
                 {...register("title", { required: true })}
-                className="w-full p-2  rounded "
+                className="w-full p-2 rounded bg-transparent border border-gray-700 focus:border-gray-500 outline-none"
                 maxLength={100}
               />
               {errors.title && (
@@ -127,11 +127,11 @@ const EditVideo = () => {
                 {videoData?.title?.length}/100
               </div>
             </div>
-            <div className="mb-4 ">
+            <div className="mb-4">
               <label className="block mb-1">Description</label>
               <textarea
                 {...register("description")}
-                className="w-full p-2  rounded "
+                className="w-full p-2 rounded bg-transparent border border-gray-700 focus:border-gray-500 outline-none"
                 rows={6}
               />
             </div>
@@ -139,7 +139,7 @@ const EditVideo = () => {
             <div className="mb-4">
               <label className="block mb-1">Thumbnail</label>
               <div className="space-x-4">
-                <div className="relative inline-block">
+                <div className="relative inline-block w-full">
                   <p className="text-sm text-gray-500 mb-2">
                     Set a thumbnail that stands out and draws viewers'
                     attention.
@@ -152,7 +152,7 @@ const EditVideo = () => {
                     className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                   />
                   <label htmlFor="thumbnail">
-                    <div className="h-25  p-4 rounded cursor-pointer  flex flex-col items-center border ">
+                    <div className="p-4 rounded cursor-pointer flex flex-col items-center border border-gray-700 border-dashed min-h-[120px] justify-center relative">
                       {thumbnailPreview && (
                         <img
                           src={thumbnailPreview}
@@ -160,7 +160,7 @@ const EditVideo = () => {
                           className="max-h-20 object-cover rounded relative"
                         />
                       )}
-                      <div className="flex flex-col items-center justify-center absolute">
+                      <div className="flex flex-col items-center justify-center">
                         <span>
                           <MdOutlineFileUpload size={30} />
                         </span>
@@ -183,12 +183,10 @@ const EditVideo = () => {
                 </div>
               </div>
             </div>
-            {/* ... other fields ... */}
           </div>
           {/* Right Column */}
           <div>
-            <div className="mb-4  rounded">
-              {/* Aspect‑ratio container – forces 16:9 shape */}
+            <div className="mb-4 rounded-lg border border-gray-700 overflow-hidden">
               <div className="aspect-video bg-black w-full">
                 <video
                   className="w-full h-full object-cover"
@@ -197,15 +195,15 @@ const EditVideo = () => {
                   controls
                 />
               </div>
-              <div className="p-2 border-t-2">
+              <div className="p-2 border-t border-gray-700">
                 <p className="text-xs">Video Link</p>
               </div>
             </div>
             {/*video visibility*/}
-            <div className="relative">
+            <div className="relative border border-gray-700 rounded-lg p-4">
               <label className="block mb-1">Visibility</label>
               <div
-                className="flex items-center cursor-pointer w-full p-2  rounded"
+                className="flex items-center cursor-pointer w-full p-2 rounded border border-gray-700"
                 onClick={() =>
                   setVideoVisibilityDropdown(
                     VideoVisibilityDropdown === videoId ? null : videoId
@@ -228,7 +226,7 @@ const EditVideo = () => {
                   onClose={() => setVideoVisibilityDropdown(null)}
                   className="left-0"
                 >
-                  <ul>
+                  <ul className="border border-gray-700 rounded">
                     {!videoData?.isPublished ? (
                       <li
                         className="px-2 py-2 hover:bg-[#A855F7] cursor-pointer"
